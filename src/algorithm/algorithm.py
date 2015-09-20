@@ -54,9 +54,9 @@ def generate_states_moving_rows(matrix):
     return result
 
 
-def init_babylon_tower(p_initial_state):
+def init_babylon_tower(pInitialState):
     global babylon_tower
-    babylon_tower = p_initial_state
+    babylon_tower = pInitialState
     set_notch()
 
 def set_notch():
@@ -68,22 +68,38 @@ def set_notch():
                 notch_column = col_index
                 notch_row = row_index
 
-def move_notch(p_movements,p_direction):
+def move_notch(pMovements,pDirection):
     global notch_row
     global notch_column
     global babylon_tower
-    direction_counter = p_direction
-    while p_movements != 0:
-        temp = babylon_tower[notch_row + p_direction][notch_column]
-        babylon_tower[notch_row][notch_column] = temp
-        babylon_tower[notch_row + p_direction][notch_column] = NOTCH_SYMBOL
-        notch_row += p_direction
-        p_movements -= 1
+    newState = babylon_tower
+    direction_counter = pDirection
+    while pMovements != 0:
+        temp = babylon_tower[notch_row+pDirection][notch_column]
+        newState[notch_row][notch_column] = temp
+        newState[notch_row+pDirection][notch_column] = NOTCH_SYMBOL
+        notch_row += pDirection
+        pMovements -= 1
+        return newState
     
 def print_data():
     print (notch_row)
     print (notch_column)
     print (babylon_tower)
+
+def get_notch_moves():
+    result = []
+    direction = 0
+    movements = 0
+    for index,row in enumerate(babylon_tower):
+        movements = index - notch_row
+        if movements != 0:
+            if movements < 0:
+                direction = UP
+            else:
+                direction = DOWN
+            result += move_notch(abs(movements),direction)
+    return result
 
 
 # Moves the elements of the row one space to the right
@@ -100,10 +116,17 @@ def move_row_to_left(pRow):
 	result += [pRow[0]]
 	return result
 
+
 # Testing
 print(move_row_to_right(example_mat[1]))
 print(move_row_to_left(example_mat[1]))
 print(init_babylon_tower(example_mat))
 print(generate_states_moving_rows(example_mat))
 print_data()
+#print(move_row_to_right(example_mat[1]))
+#print(move_row_to_left(example_mat[1]))
+
+
+
+
 
