@@ -16,8 +16,9 @@ BABYLON_TOWER = [];
 #returns [] if something was wrong
 def validate_tower(babylon_tower):
     BABYLON_TOWER = validate_number_rows(babylon_tower);
-    for row in BABYLON_TOWER:
-        print(row)
+##    for row in BABYLON_TOWER:
+##        print(row)
+    print(BABYLON_TOWER)
     return BABYLON_TOWER
 
 #verifies if the user entry has only 4 rows with its corresponding index
@@ -44,11 +45,11 @@ def validate_number_rows(babylon_tower):
             #returns the matrix to work internally
             return create_matrix(ROWS,babylon_tower);
         else:
-            print("La cantidad de bolitas por color no es correcta o la muesca está mal colocada")
+            return "La cantidad de bolitas por color no es correcta o la muesca está mal colocada"
             #if the colors of the tower or the hole are wrong
-            return []
+##            return []
     else:
-        print("La numeración de las filas no es correcta")
+        return "La numeración de las filas no es correcta"
 
         
 def validate_balls(babylon_tower):

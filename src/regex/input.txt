@@ -2,3 +2,4 @@ F4=B,O,B,O,H
 F2=O,B,O,B
 F3=G,R,G,R
 F1=G,R,G,R
+F1=G,R,G,B
