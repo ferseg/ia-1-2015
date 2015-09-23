@@ -167,7 +167,8 @@ def iniciarInterfaz():
                     flechas[0].append([flechaI,y,x]);
                     flechas[1].append([flechaF,y,x]);
                     
-        #}       
+        #}
+            
         estados[0].append(filaI);
         estados[1].append(filaF);
         
@@ -332,26 +333,31 @@ def moveV(col, dire, estado):
 #--------------------------------------FUNCIONES DEL MENÚ-----------------------------------------
 
 
-def undo():
-#{
-    print("undo",UNDOARRAY);
-#}
-
-def redo():
-#{
-    print("redo",REDOARRAY);
-#}
-
-def action():
-#{
-    print("action");
-#}
+##def undo():
+###{
+##    print("undo",UNDOARRAY);
+###}
+##
+##def redo():
+###{
+##    print("redo",REDOARRAY);
+###}
+##
+##def action():
+###{
+##    print("action");
+###}
 
 def reset():
 #{
     if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
+        for estado in range(0,2):
+            for fila in range (1,6):
+                for col in range(0,4):
+                    print(estados[estado][fila][col]);
+                    estados[estado][fila][col].place_forget();
         moveArrows(-100,0,0);
-        iniciarInterfaz();        
+        iniciarInterfaz(); 
 #}
 
 
