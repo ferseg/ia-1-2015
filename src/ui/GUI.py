@@ -90,7 +90,7 @@ naranja = PhotoImage(file = 'imgs/naranja2.png');
 rojo = PhotoImage(file = 'imgs/rojo2.png');
 verde = PhotoImage(file = 'imgs/verde2.png');
 
-colores = [azul, naranja, rojo, verde];
+colores = [azul, naranja, verde, rojo, blanco];
 
 estados = [[],[], [-1,-1,-1]];  # 0 -> inicial, 1 -> final, 2 -> seleccionado
 flechas = [[],[]];
@@ -267,10 +267,11 @@ def updateMov(fila, col, estado):
 
 def getPosMuesca(estado):
 #{
-    for fila in range(1,7):
+    for fila in range(1,6):
         for col in range(0,4):
             if(str(estados[estado][fila][col].cget('image')) == str(blanco)):
                 return [fila,col];
+    return -1;
 #}
 
 def moveH(fila, dire, estado):
@@ -301,7 +302,8 @@ def moveH(fila, dire, estado):
         updateMov(fila, nuevaPos, estado);
     else:
         posMuesca = getPosMuesca(estado);
-        updateMov(posMuesca[0], posMuesca[1], estado);
+        if posMuesca != -1:
+            updateMov(posMuesca[0], posMuesca[1], estado);
         
     
 #}
@@ -348,6 +350,46 @@ def moveV(col, dire, estado):
 ##    print("action");
 ###}
 
+color_value = ["Blue","Orange","Green","Red","Space"];
+
+def loadState(matrix, state):
+#{
+    new_matrix = [];
+    for row in range(4,-1,-1):        
+        new_row = [];
+        for col in range(0,4):            
+            value = matrix[col][row]; 
+            if row != 4:
+                new_row.append(value);
+            elif value != -1:                
+                new_row.append([value,col]);
+                
+        new_matrix.append(new_row);
+    
+    for row in range(0,5):
+        #print(new_matrix[row])
+        for col in range(0,len(new_matrix[row])):
+            if(row != 0):
+                value = new_matrix[row][col];
+                if(value == 4):
+                    print("muesca", row , col);
+                    moveArrows(0, col, state);
+                    updateMov(row + 1,col,state);
+                estados[state][row + 1][col].configure(image = colores[value]);
+            else:                
+                value = new_matrix[0][0][0];
+                ball_pos = new_matrix[0][0][1];                
+                estados[state][1][0].configure(image = colores[value]);
+                for x in range(0,ball_pos):
+                    moveH(1,-1,state);
+    
+#}
+
+#matrix = [[2, 3, 2, 3, -1],[1, 0, 1, 0, -1],[2, 3, 2, 3, -1],[0, 1, 0, 1, 4]];
+#matrix = [[0, 3, 1, 3, -1],[0, 1, 2, 4, -1],[2, 0, 1, 0, 1],[3, 3, 2, 2, -1]];
+
+
+
 def reset():
 #{
     if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
@@ -364,8 +406,7 @@ def reset():
 #--------------------------------------------MAIN-----------------------------------------------
 
 iniciarInterfaz();
-
-
+#loadState(matrix,0);
 
 
 
