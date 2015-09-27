@@ -6,22 +6,6 @@ UNDOARRAY = [];
 global REDOARRAY;
 REDOARRAY = [];
 
-def undo():
-#{
-    print("undo",UNDOARRAY);
-#}
-
-def redo():
-#{
-    print("redo",REDOARRAY);
-#}
-
-def action():
-#{
-    print("action");
-#}
-
-
 #---------------------------------------------MENÚ-------------------------------------------------#
 
 global WIDTH;
@@ -60,7 +44,7 @@ boptions2['padx'] = '5';
 boptions2['pady'] = '5';
 boptions2['relief'] = 'ridge';
 
-open_file_btn = Button(window, text = "Abrir Archivo", command = openFile, **boptions2);
+open_file_btn = Button(window, text = "Abrir Archivo", command = lambda: openFile(), **boptions2);
 open_file_btn.place(x = 75, y = 40);
 
 undo_btn = Button(window, **boptions);
@@ -79,7 +63,7 @@ redo_btn.place(x = WIDTH - 175, y = 40);
 redo_lbl = Label(window, text="Rehacer", font=('Arial','8'), background='white');
 redo_lbl.place(x = WIDTH - 183, y = 70);
 
-reset_btn = Button(window, text="Reset", **boptions2);
+reset_btn = Button(window, text="Reset", command = lambda: reset(), **boptions2);
 reset_btn.place(x = WIDTH - 125, y = 40);
 
 
@@ -106,7 +90,7 @@ naranja = PhotoImage(file = 'imgs/naranja2.png');
 rojo = PhotoImage(file = 'imgs/rojo2.png');
 verde = PhotoImage(file = 'imgs/verde2.png');
 
-colores = [azul, naranja, rojo, verde];
+colores = [azul, naranja, verde, rojo, blanco];
 
 estados = [[],[], [-1,-1,-1]];  # 0 -> inicial, 1 -> final, 2 -> seleccionado
 flechas = [[],[]];
@@ -114,71 +98,81 @@ flechas = [[],[]];
 xInicial = 150;
 yInicial = 225;
 
-for y in range(0,7):
-#{
-    filaI = [];
-    filaF = [];
-    noAgregar = False;
-    
-    for x in range(0,6):
+def iniciarInterfaz():
+
+    estados[0] = [];
+    estados[1] = [];
+    estados[2] = [-1,-1,-1];
+
+    flechas[0] = [];
+    flechas[1] = [];
+
+    for y in range(0,7):
     #{
-        if 0 < x < 5 and 0 < y < 6:            
-            bolaI = Button(window, command = lambda y = y,x = x: selectBtn(y,x - 1,0), **boptions);
-            bolaF = Button(window, command = lambda y = y,x = x: selectBtn(y,x - 1,1), **boptions);
-            if y != 1:
-                bolaI.configure(image = colores[x - 1]);
-                bolaF.configure(image = colores[x - 1]);                
-            elif x == 1:
-                bolaI.configure(image = blanco);
-                bolaF.configure(image = blanco);                
-
-            bolaI.place(x = (xInicial + (50 * x)), y = (yInicial + (50 * y)));
-            bolaF.place(x = (xInicial + 415 + (50 * x)), y = (yInicial + (50 * y)));
-
-            if(not noAgregar):
-                filaI.append(bolaI);
-                filaF.append(bolaF);            
-            
-        else:            
-            isMuesca = False;
-            flechaI = Button(window, **boptions);
-            flechaF = Button(window, **boptions);
+        filaI = [];
+        filaF = [];
+        noAgregar = False;
         
-            if x == 0 and y != 0 and y != 6:
-                flechaI.configure(command = lambda y = y: moveH(y,1,0));
-                flechaI.configure(image = izquierda);
-                flechaF.configure(command = lambda y = y: moveH(y,1,1));
-                flechaF.configure(image = izquierda);
-            elif x == 5 and y != 0 and y != 6:
-                flechaI.configure(command = lambda y = y: moveH(y,-1,0));
-                flechaI.configure(image = derecha);
-                flechaF.configure(command = lambda y = y: moveH(y,-1,1));
-                flechaF.configure(image = derecha);
-            elif y == 0 and x != 0 and x != 5:
-                flechaI.configure(command = lambda x = x: moveV(x,-1,0));
-                flechaI.configure(image = arriba);
-                flechaF.configure(command = lambda x = x: moveV(x,-1,1));
-                flechaF.configure(image = arriba);
-                isMuesca = True;
-            elif y == 6 and x != 0 and x != 5:
-                flechaI.configure(command = lambda x = x: moveV(x,1,0));
-                flechaI.configure(image = abajo);
-                flechaF.configure(command = lambda x = x: moveV(x,1,1));
-                flechaF.configure(image = abajo);
-                isMuesca = True;
+        for x in range(0,6):
+        #{
+            if 0 < x < 5 and 0 < y < 6:            
+                bolaI = Button(window, command = lambda y = y,x = x: selectBtn(y,x - 1,0), **boptions);
+                bolaF = Button(window, command = lambda y = y,x = x: selectBtn(y,x - 1,1), **boptions);
+                if y != 1:
+                    bolaI.configure(image = colores[x - 1]);
+                    bolaF.configure(image = colores[x - 1]);                
+                elif x == 1:
+                    bolaI.configure(image = blanco);
+                    bolaF.configure(image = blanco);                
 
-            if(not isMuesca or isMuesca and x == 1 and y == 6):
-                flechaI.place(x = (xInicial + (50 * x)), y = (yInicial + (50 * y)));
-                flechaF.place(x = (xInicial + 415 + (50 * x)), y = (yInicial + (50 * y)));            
-            if isMuesca:
-                flechas[0].append([flechaI,y,x]);
-                flechas[1].append([flechaF,y,x]);
+                bolaI.place(x = (xInicial + (50 * x)), y = (yInicial + (50 * y)));
+                bolaF.place(x = (xInicial + 415 + (50 * x)), y = (yInicial + (50 * y)));
+
+                if(not noAgregar):
+                    filaI.append(bolaI);
+                    filaF.append(bolaF);            
                 
-    #}       
-    estados[0].append(filaI);
-    estados[1].append(filaF);
-    
-#}
+            else:            
+                isMuesca = False;
+                flechaI = Button(window, **boptions);
+                flechaF = Button(window, **boptions);
+            
+                if x == 0 and y != 0 and y != 6:
+                    flechaI.configure(command = lambda y = y: moveH(y,1,0));
+                    flechaI.configure(image = izquierda);
+                    flechaF.configure(command = lambda y = y: moveH(y,1,1));
+                    flechaF.configure(image = izquierda);
+                elif x == 5 and y != 0 and y != 6:
+                    flechaI.configure(command = lambda y = y: moveH(y,-1,0));
+                    flechaI.configure(image = derecha);
+                    flechaF.configure(command = lambda y = y: moveH(y,-1,1));
+                    flechaF.configure(image = derecha);
+                elif y == 0 and x != 0 and x != 5:
+                    flechaI.configure(command = lambda x = x: moveV(x,-1,0));
+                    flechaI.configure(image = arriba);
+                    flechaF.configure(command = lambda x = x: moveV(x,-1,1));
+                    flechaF.configure(image = arriba);
+                    isMuesca = True;
+                elif y == 6 and x != 0 and x != 5:
+                    flechaI.configure(command = lambda x = x: moveV(x,1,0));
+                    flechaI.configure(image = abajo);
+                    flechaF.configure(command = lambda x = x: moveV(x,1,1));
+                    flechaF.configure(image = abajo);
+                    isMuesca = True;
+
+                if(not isMuesca or isMuesca and x == 1 and y == 6):
+                    flechaI.place(x = (xInicial + (50 * x)), y = (yInicial + (50 * y)));
+                    flechaF.place(x = (xInicial + 415 + (50 * x)), y = (yInicial + (50 * y)));            
+                if isMuesca:
+                    flechas[0].append([flechaI,y,x]);
+                    flechas[1].append([flechaF,y,x]);
+                    
+        #}
+            
+        estados[0].append(filaI);
+        estados[1].append(filaF);
+        
+    #}
 
 def selectBtn(fila, col, estado):
 #{
@@ -237,7 +231,7 @@ def colHasEmptySpace(col, estado):
 
 def moveArrows(posMuesca, col, estado):
 #{        
-    if posMuesca != -1:
+    if posMuesca >= 0:
         flechas[estado][posMuesca][0].place_forget();
         flechas[estado][posMuesca + 4][0].place_forget();
         
@@ -245,6 +239,11 @@ def moveArrows(posMuesca, col, estado):
                                       y = (yInicial + (50 * flechas[estado][col][1])));
         flechas[estado][col + 4][0].place(x =(xInicial+(415*estado)+(50*flechas[estado][col+4][2])),
                                       y = (yInicial + (50 * flechas[estado][col + 4][1])));
+
+    elif posMuesca == -100:
+        for est in flechas:
+            for flecha in est:
+                flecha[0].place_forget();
         
         
         
@@ -268,10 +267,11 @@ def updateMov(fila, col, estado):
 
 def getPosMuesca(estado):
 #{
-    for fila in range(1,7):
+    for fila in range(1,6):
         for col in range(0,4):
             if(str(estados[estado][fila][col].cget('image')) == str(blanco)):
                 return [fila,col];
+    return -1;
 #}
 
 def moveH(fila, dire, estado):
@@ -302,7 +302,8 @@ def moveH(fila, dire, estado):
         updateMov(fila, nuevaPos, estado);
     else:
         posMuesca = getPosMuesca(estado);
-        updateMov(posMuesca[0], posMuesca[1], estado);
+        if posMuesca != -1:
+            updateMov(posMuesca[0], posMuesca[1], estado);
         
     
 #}
@@ -331,14 +332,81 @@ def moveV(col, dire, estado):
 #}
 
 
+#--------------------------------------FUNCIONES DEL MENÚ-----------------------------------------
+
+
+##def undo():
+###{
+##    print("undo",UNDOARRAY);
+###}
+##
+##def redo():
+###{
+##    print("redo",REDOARRAY);
+###}
+##
+##def action():
+###{
+##    print("action");
+###}
+
+color_value = ["Blue","Orange","Green","Red","Space"];
+
+def loadState(matrix, state):
+#{
+    new_matrix = [];
+    for row in range(4,-1,-1):        
+        new_row = [];
+        for col in range(0,4):            
+            value = matrix[col][row]; 
+            if row != 4:
+                new_row.append(value);
+            elif value != -1:                
+                new_row.append([value,col]);
+                
+        new_matrix.append(new_row);
+    
+    for row in range(0,5):
+        #print(new_matrix[row])
+        for col in range(0,len(new_matrix[row])):
+            if(row != 0):
+                value = new_matrix[row][col];
+                if(value == 4):
+                    print("muesca", row , col);
+                    moveArrows(0, col, state);
+                    updateMov(row + 1,col,state);
+                estados[state][row + 1][col].configure(image = colores[value]);
+            else:                
+                value = new_matrix[0][0][0];
+                ball_pos = new_matrix[0][0][1];                
+                estados[state][1][0].configure(image = colores[value]);
+                for x in range(0,ball_pos):
+                    moveH(1,-1,state);
+    
+#}
+
+#matrix = [[2, 3, 2, 3, -1],[1, 0, 1, 0, -1],[2, 3, 2, 3, -1],[0, 1, 0, 1, 4]];
+#matrix = [[0, 3, 1, 3, -1],[0, 1, 2, 4, -1],[2, 0, 1, 0, 1],[3, 3, 2, 2, -1]];
 
 
 
+def reset():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
+        for estado in range(0,2):
+            for fila in range (1,6):
+                for col in range(0,4):
+                    print(estados[estado][fila][col]);
+                    estados[estado][fila][col].place_forget();
+        moveArrows(-100,0,0);
+        iniciarInterfaz(); 
+#}
 
 
+#--------------------------------------------MAIN-----------------------------------------------
 
-
-
+iniciarInterfaz();
+#loadState(matrix,0);
 
 
 

@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 F4=B,O,B,O,H
 F2=O,B,O,B
 F3=G,R,G,R
 F1=G,R,G,R
 F1=G,R,G,B
+=======
+F1=B,R,O,R
+F2=B,O,G,H
+F3=G,B,O,B,O
+F4=R,R,G,G
+>>>>>>> 35caea27cf6bf5bf77c1a78dc0ab333e65254a61
