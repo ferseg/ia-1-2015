@@ -203,9 +203,7 @@ def moveBtn(fila, col, estado):
             return -1;
                                                   
         estados[estado][fila][col].configure(image = prevImg);
-        estados[estado][filaAnt][colAnt].configure(image = currImg);
-
-           
+        estados[estado][filaAnt][colAnt].configure(image = currImg);        
         
         return 1;
     else:
@@ -366,13 +364,11 @@ def loadState(matrix, state):
                 
         new_matrix.append(new_row);
     
-    for row in range(0,5):
-        #print(new_matrix[row])
+    for row in range(0,5):    
         for col in range(0,len(new_matrix[row])):
             if(row != 0):
                 value = new_matrix[row][col];
-                if(value == 4):
-                    print("muesca", row , col);
+                if(value == 4):                    
                     moveArrows(0, col, state);
                     updateMov(row + 1,col,state);
                 estados[state][row + 1][col].configure(image = colores[value]);
@@ -386,7 +382,7 @@ def loadState(matrix, state):
 #}
 
 #matrix = [[2, 3, 2, 3, -1],[1, 0, 1, 0, -1],[2, 3, 2, 3, -1],[0, 1, 0, 1, 4]];
-#matrix = [[0, 3, 1, 3, -1],[0, 1, 2, 4, -1],[2, 0, 1, 0, 1],[3, 3, 2, 2, -1]];
+matrix = [[0, 3, 1, 3, -1],[0, 1, 2, 4, -1],[2, 0, 1, 0, 1],[3, 3, 2, 2, -1]];
 
 
 
@@ -406,7 +402,7 @@ def reset():
 #--------------------------------------------MAIN-----------------------------------------------
 
 iniciarInterfaz();
-#loadState(matrix,0);
+loadState(matrix,0);
 
 
 
