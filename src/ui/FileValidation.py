@@ -121,3 +121,9 @@ def create_matrix(rows_numbers,babylon_tower):
     #insert them into the matrix
     matrix = list(unordered_babylon_tower.values());
     return matrix;
+
+def clear_variables():
+    global TOWER_COLORS;
+    global ROWS;
+    TOWER_COLORS = {"green" : 0, "blue" : 0, "orange" : 0, "red" : 0, "hole" : 0};
+    ROWS = [];
