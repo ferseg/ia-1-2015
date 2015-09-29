@@ -1,8 +1,7 @@
 import constants_module as K
 
+
 def set_notch(pBabylonTower):
-    notch_row = 0
-    notch_column = 0
     for row_index, row in enumerate(pBabylonTower):
         for col_index, element in enumerate(row):
             if element == K.NOTCH_SYMBOL:
