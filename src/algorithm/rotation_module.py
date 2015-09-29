@@ -21,3 +21,13 @@ def rotate_matrix_to_left(pMatrix):
         rotated_row = move_row_to_left(result[current_row_index])
         result[current_row_index] = rotated_row
     return result
+
+
+
+
+
+
+
+
+    
+
