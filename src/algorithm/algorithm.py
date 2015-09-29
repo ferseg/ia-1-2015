@@ -122,26 +122,37 @@ def is_matrix_on_states(pMatrix):
 
 # Moves the elements of the row one space to the right
 def move_row_to_right(pRow):
-	result = []
-	result += [pRow[len(pRow) - 1]]
-	result += pRow[:-1]
-	return result
+    result = []
+    result += [pRow[len(pRow) - 1]]
+    result += pRow[:-1]
+    return result
 
 # Moves the elements of the row one space to the left
 def move_row_to_left(pRow):
-	result = []
-	result += pRow[1:]
-	result += [pRow[0]]
-	return result
+    result = []
+    result += pRow[1:]
+    result += [pRow[0]]
+    return result
+
 
 
 # Testing
-print(init_babylon_tower(example_mat))
-closed_states = generate_states_moving_rows(example_mat)
-print(closed_states)
-closed_states += generate_states_moving_rows(example_mat)
-print(closed_states)
-print_data()
+#print(init_babylon_tower(example_mat))
+#closed_states = generate_states_moving_rows(example_mat)
+#print(closed_states)
+#closed_states += generate_states_moving_rows(example_mat)
+#print(closed_states)
+#print_data()
+
+
+
+
+
+
+
+
+
+
 
 
 
