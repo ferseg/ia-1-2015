@@ -24,7 +24,7 @@ canvas.create_rectangle(0,0,WIDTH,HEIGHT, fill="white");
 
 title_lbl = Label(window, text = "I Proyecto I.A, Torre de Babilonia",
                   font = ('Arial','17'), background = 'white');
-title_lbl.place(x = 300, y = 35);
+title_lbl.place(x = 270, y = 50);
 
 foptions = {};
 foptions['defaultextension'] = '.txt';
@@ -33,7 +33,7 @@ foptions['filetypes'] = [('Todos los archivos','.*'),('Archivos de texto','.txt'
 boptions = {};
 boptions['background'] = 'white';
 boptions['borderwidth'] = '0';
-boptions['cursor'] = 'hand2';
+
 
 boptions2 = boptions.copy();
 boptions2['activebackground'] = 'white';
@@ -42,12 +42,7 @@ boptions2['borderwidth'] = '1';
 boptions2['padx'] = '5';
 boptions2['pady'] = '5';
 boptions2['relief'] = 'ridge';
-
-init_state_file_btn = Button(window, text = "Cargar estado inicial desde archivo", command = lambda: openFile(0), **boptions2);
-init_state_file_btn.place(x = 200, y = 190);
-
-final_state_file_btn = Button(window, text = "Cargar estado final desde archivo", command = lambda: openFile(1), **boptions2);
-final_state_file_btn.place(x = 620, y = 190);
+boptions2['cursor'] = 'hand2';
 
 undo_btn = Button(window, **boptions);
 undo_img = PhotoImage(file = "imgs/undo.gif", width= 25, height = 25);
@@ -66,23 +61,28 @@ redo_lbl = Label(window, text="Rehacer", font=('Arial','8'), background='white')
 #redo_lbl.place(x = WIDTH - 183, y = 70);
 
 reset_btn = Button(window, text="Reiniciar", command = lambda: reset(), **boptions2);
-reset_btn.place(x = 470, y = 140);
+reset_btn.place(x = 400, y = 140);
 
-reset_btn = Button(window, text=" Guardar", command = lambda: save(), **boptions2);
-reset_btn.place(x = 470, y = 180);
-
+save_btn = Button(window, text=" Guardar", command = lambda: save(), **boptions2);
+save_btn.place(x = 400, y = 180);
 
 #-------------------------------------FILAS Y COLUMNAS--------------------------------------------#
 
-canvas.create_rectangle(50,100, 950,HEIGHT - 50, fill="#fafafa", outline = 'white');
+canvas.create_rectangle(25, 100, 825,HEIGHT - 50, fill="#fafafa", outline = 'white');
 
 init_state_lbl = Label(window, text = "Estado Inicial",
                        font = ('Arial','17'), background='#fafafa');
-init_state_lbl.place(x = 230, y = 150);
+init_state_lbl.place(x = 160, y = 150);
+
 final_state_lbl = Label(window, text = "Estado Final",
                         font = ('Arial', '17'), background='#fafafa');
-final_state_lbl.place(x = 640, y = 150);
-boptions['background'] = '#fafafa';
+final_state_lbl.place(x = 585, y = 150);
+
+init_state_file_btn = Button(window, text = "Cargar estado inicial desde archivo", command = lambda: openFile(0), **boptions2);
+init_state_file_btn.place(x = 130, y = 190);
+
+final_state_file_btn = Button(window, text = "Cargar estado final desde archivo", command = lambda: openFile(1), **boptions2);
+final_state_file_btn.place(x = 560, y = 190);
 
 arriba = PhotoImage(file = 'imgs/up.png');
 abajo = PhotoImage(file = 'imgs/down.png');
@@ -107,20 +107,23 @@ colores_lbl = ["Azul(B)", "Naranja(O)","Verde(G)","Rojo(R)","Vacío(H)"];
 
 for c in range(0, 5):
 #{
-    btn = Button(window, **boptions);
-    btn.configure(image = colores[c]);
-    btn.place(x = 255 + (100 * c), y = 600);
+    ball = Label(window, **boptions);
+    ball.configure(image = colores[c]);
+    ball.place(x = 180 + (100 * c), y = 600);
 
     lbl = Label(window, text = colores_lbl[c], font=('Arial','8'), background='#fafafa');
-    lbl.place(x = 290 + (100 * c), y = 605);
+    lbl.place(x = 215 + (100 * c), y = 605);
 #}
     
+
+boptions['background'] = '#fafafa';
+boptions['cursor'] = 'hand2';
 
 estados = [[],[], [-1,-1,-1]];  # 0 -> inicial, 1 -> final, 2 -> seleccionado
 flechas = [[],[]];
 
-xInicial = 150;
-yInicial = 225;
+xInicial = 75;
+yInicial = 250;
 
 def iniciarInterfaz():
 
@@ -295,7 +298,7 @@ def updateMov(fila, col, estado):
     elif(fila == 2):        
         flechas[estado][col][0].place_forget();
     else:
-        print(fila);
+        #print(fila);
         flechas[estado][col + (fila - 1)][0].place_forget();
             
 #}
@@ -366,80 +369,91 @@ def moveV(col, dire, estado):
 
 #}
 
+#------------------------------------------ERRORES------------------------------------------------#
+
+canvas.create_line(840, 75 , 840, HEIGHT - 25, fill="#777777")
+
+canvas.create_rectangle(855, 100, 1255, HEIGHT - 50, fill="#efefef", outline = 'white');
+
+errors_lbl = Label(window, text = "Log de Errores",
+                   font=('Arial','13'), background='#efefef');
+errors_lbl.place(x = 990, y = 115);
+
+scrollbar = Scrollbar(window);
+
+errors_listbox = Listbox(window, width = 45, height = 24, bd = 0,
+                         font = ('Arial','11'),
+                         yscrollcommand = scrollbar.set);
+errors_listbox.place(x = 875, y = 150);
+
+scrollbar.config(command = errors_listbox.yview);
+
+error_help = Button(window, text = "Explorar error",
+                    command = lambda : explore_error() ,**boptions2);
+error_help.place(x = 1020, y = HEIGHT - 100);
+
+def printErrorMsg(msg):
+#{
+    errors_listbox.insert(END, msg);
+    errors_listbox.see("end");
+#}
+
+def explore_error():
+#{
+    selected_index = errors_listbox.curselection();
+    if(len(selected_index) == 0):
+        printErrorMsg("Seleccione primero un error para ver más detalles");
+    else:
+        error = errors_listbox.get(selected_index);
+        explanation = "";
+        if(error == "Seleccione primero un error para ver más detalles"):
+            explanation = "Para poder ver la información respecto a un error, es necesario hacer click al texto del error";
+        elif(error == "Muesca mal colocada o cantidad incorrecta de bolitas"):
+            explanation = "En el archivo de texto se colocó una cantidad menor o mayor que 4 bolitas de colores o más de 1 muesca vacía.\nRecuerde que el máximo número de bolitas de colores permitido es de 4 para cada color y solamente una muesca o espacio vacío";
+        else:
+            explanation = "En el archivo de texto se ingresaron incorrectamente las filas, ya sea porque hay filas repetidas o tienen asignado un número mayor o inferior para la fila.\nRecuerde que el formato para las filas es F1, F2, F3 y F4";
+
+        
+        messagebox.showinfo("Detalles del error", error + ":\n\n" + explanation);
+#}
+
+
 
 #--------------------------------------FUNCIONES DEL MENÚ-----------------------------------------
 
-
-##def undo():
-###{
-##    print("undo",UNDOARRAY);
-###}
-##
-##def redo():
-###{
-##    print("redo",REDOARRAY);
-###}
-##
-##def action():
-###{
-##    print("action");
-###}
-
 color_value = ["Blue","Orange","Green","Red","Space"];
-
-def loadState(matrix, state):
-#{
-    new_matrix = [];
-    for row in range(4,-1,-1):        
-        new_row = [];
-        for col in range(0,4):            
-            value = matrix[col][row]; 
-            if row != 4:
-                new_row.append(value);
-            elif value != -1:                
-                new_row.append([value,col]);
-                
-        new_matrix.append(new_row);
-    
-    for row in range(0,5):    
-        for col in range(0,len(new_matrix[row])):
-            if(row != 0):
-                value = new_matrix[row][col];
-                if(value == 4):                    
-                    moveArrows(0, col, state);
-                    updateMov(row + 1,col,state);
-                estados[state][row + 1][col].configure(image = colores[value]);
-            else:                
-                value = new_matrix[0][0][0];
-                ball_pos = new_matrix[0][0][1];                
-                estados[state][1][0].configure(image = colores[value]);
-                for x in range(0,ball_pos):
-                    moveH(1,-1,state);
-    
-#}
-
-#matrix = [[2, 3, 2, 3, -1],[1, 0, 1, 0, -1],[2, 3, 2, 3, -1],[0, 1, 0, 1, 4]];
-#matrix = [[0, 3, 1, 3, -1],[0, 1, 2, 4, -1],[2, 0, 1, 0, 1],[3, 3, 2, 2, -1]];
 
 def openFile(state):
 #{
     filename = filedialog.askopenfilename(**foptions);
     #print(filename, state);
-    matrix = load_matrix(filename);    
-    loadState(matrix,state);
+    matrix = load_matrix(filename);
+
+    if isinstance(matrix, str):
+        printErrorMsg(matrix);
+    else:
+        loadState(matrix,state);
+
+    
     clear_variables();
+#}
+
+def reset_state():
+#{
+    for estado in range(0,2):
+            for fila in range (1,6):
+                for col in range(0,4):
+                    #print(estados[estado][fila][col]);
+                    estados[estado][fila][col].place_forget();
+    moveArrows(-100,0,0);
+    iniciarInterfaz(); 
 #}
 
 def reset():
 #{
     if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
-        for estado in range(0,2):
-            for fila in range (1,6):
-                for col in range(0,4):
-                    #print(estados[estado][fila][col]);
-                    estados[estado][fila][col].place_forget();
-        moveArrows(-100,0,0);
-        iniciarInterfaz(); 
+        reset_state();
+        errors_listbox.delete(0, END);
 #}
 
 def get_index(btn):
@@ -471,25 +485,51 @@ def write_file(state):
                                     
         file.write("\n");
     
-    file.close();
-        
-            
+    file.close();                
 #}
 
 def save():
 #{
-    if(messagebox.askokcancel("Alerta!","Desea guardar los estados?\nEl archivo anterior sera sobreescrito")):
+    if(messagebox.askokcancel("Alerta!","Desea guardar los estados?" +
+                              "\nEl archivo anterior sera sobreescrito")):
         for state in range(0,2):
-            write_file(state);    
+            write_file(state);
+    
 #}
 
-
+def loadState(matrix, state):
+#{            
+    new_matrix = [];
+    for row in range(4,-1,-1):        
+        new_row = [];
+        for col in range(0,4):            
+            value = matrix[col][row]; 
+            if row != 4:
+                new_row.append(value);
+            elif value != -1:                
+                new_row.append([value,col]);
+                
+        new_matrix.append(new_row);
+    
+    for row in range(0,5):    
+        for col in range(0,len(new_matrix[row])):
+            if(row != 0):
+                value = new_matrix[row][col];
+                if(value == 4):                    
+                    moveArrows(0, col, state);
+                    updateMov(row + 1,col,state);
+                estados[state][row + 1][col].configure(image = colores[value]);
+            else:                
+                value = new_matrix[0][0][0];
+                ball_pos = new_matrix[0][0][1];                
+                estados[state][1][0].configure(image = colores[value]);
+                for x in range(0,ball_pos):
+                    moveH(1,-1,state);    
+#}                    
+                    
 #--------------------------------------------MAIN-----------------------------------------------
 
 iniciarInterfaz();
-#loadState(matrix,0);
-
-
 
 
 
