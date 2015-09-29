@@ -1,4 +1,5 @@
-from copy import copy, deepcopy
+from movements_module import generate_states_moving_rows
+from rotation_module import rotate_matrix_to_left
 
 P = 0
 Y = 1
@@ -7,11 +8,6 @@ G = 3
 H = 4
 E = -1
 
-T_RIGHT = 0
-T_LEFT = 1
-
-MAXIMUN_NUMBER_OF_ROWS = 5
-MAXIMUN_NUMBER_OF_ROW_TRANSFORMATION = 2
 
 example_mat = [[E, H, E, E],
 			   [P, Y, P, O],
@@ -33,29 +29,6 @@ open_states = []
 # Contains all the states that are close
 closed_states = []
 
-# Generates the all available states depending on the current matrix (pMatrix)
-def generate_states_moving_rows(pMatrix):
-    result = []
-    for current_row_index in range(0, MAXIMUN_NUMBER_OF_ROWS):
-        for current_transformation_type in range(0, MAXIMUN_NUMBER_OF_ROW_TRANSFORMATION):
-            # A copy of the initial matrix
-            tmp_matrix = deepcopy(pMatrix)
-            # the row to be modified
-            current_row = tmp_matrix[current_row_index]
-            # the transformation depending on the required type
-            fun = select_transformation_type(current_transformation_type)
-            # resulting row after applying the transformation
-            resulting_row = fun(current_row)
-            tmp_matrix[current_row_index] = resulting_row
-            if not is_matrix_on_states(tmp_matrix):
-                result += [tmp_matrix]
-    return result
-
-def select_transformation_type(pType):
-    if pType == T_LEFT:
-        return move_row_to_left
-    elif pType == T_RIGHT:
-        return move_row_to_right
 
 
 def init_babylon_tower(pInitialState):
@@ -105,42 +78,11 @@ def get_notch_moves():
             result += move_notch(abs(movements),direction)
     return result
 
-def is_matrix_on_states(pMatrix):
-    global closed_states
-    global open_states
-    for current_matrix_index in range(0, len(closed_states)):
-        current_matrix = closed_states[current_matrix_index]
-        if current_matrix == pMatrix:
-            return True
-    for current_matrix_index in range(0, len(open_states)):
-        current_matrix = open_states[current_matrix_index]
-        if current_matrix == pMatrix:
-            return True
-    return False
-
-# Moves the elements of the row one space to the right
-def move_row_to_right(pRow):
-	result = []
-	result += [pRow[len(pRow) - 1]]
-	result += pRow[:-1]
-	return result
-
-# Moves the elements of the row one space to the left
-def move_row_to_left(pRow):
-	result = []
-	result += pRow[1:]
-	result += [pRow[0]]
-	return result
-
 
 # Testing
-print(init_babylon_tower(example_mat))
-closed_states = generate_states_moving_rows(example_mat)
-print(closed_states)
-closed_states += generate_states_moving_rows(example_mat)
-print(closed_states)
-print_data()
-
+print(example_mat)
+print(rotate_matrix_to_left(example_mat))
+print(generate_states_moving_rows(example_mat, open_states, closed_states))
 
 
 
