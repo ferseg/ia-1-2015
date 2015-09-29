@@ -75,9 +75,10 @@ def get_notch_moves():
                 direction = UP
             else:
                 direction = DOWN
-            result += move_notch(abs(movements),direction)
+            tmp_matrix = move_notch(abs(movements),direction)
+            if not is_matrix_on_states(tmp_matrix):
+                result += [tmp_mmatrix]
     return result
-
 
 # Testing
 print(example_mat)
