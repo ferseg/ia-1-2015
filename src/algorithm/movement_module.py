@@ -1,29 +1,18 @@
 import constants_module as K
 
-
-example_mat = [[K.E,K.H, K.E, K.E],
-			   [K.P, K.Y, K.P, K.O],
-			   [K.O, K.G, K.O, K.G],
-			   [K.G, K.P, K.G, K.Y],
-			   [K.Y, K.O, K.Y, K.P]]
-
-
-notch_row = 0
-notch_column = 0
-
 def set_notch(pBabylonTower):
-    global notch_row
-    global notch_column
+    notch_row = 0
+    notch_column = 0
     for row_index, row in enumerate(pBabylonTower):
         for col_index, element in enumerate(row):
             if element == K.NOTCH_SYMBOL:
-                notch_column = col_index
-                notch_row = row_index
+                return [row_index,col_index]
+                
 
 def move_notch(pBabylonTower,pMovements, pDirection):
-    global notch_column
-    global notch_row
-    set_notch(pBabylonTower)
+    notch = set_notch(pBabylonTower)
+    notch_row = notch[0]
+    notch_column = notch[1]
     newState = pBabylonTower
     direction_counter = pDirection
     while pMovements != 0:
@@ -35,9 +24,9 @@ def move_notch(pBabylonTower,pMovements, pDirection):
         return newState
 
 def get_notch_moves(pBabylonTower):
-    global notch_column
-    global notch_row
-    set_notch(pBabylonTower)
+    notch = set_notch(pBabylonTower)
+    notch_row = notch[0]
+    notch_column = notch[1]
     result = []
     direction = 0
     movements = 0
