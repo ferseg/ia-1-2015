@@ -1,5 +1,5 @@
-from rotation_module import move_row_to_right, move_row_to_left
 from copy import copy, deepcopy
+import rotation_module as rotation_m
 
 MAXIMUN_NUMBER_OF_ROWS = 5
 MAXIMUN_NUMBER_OF_ROW_TRANSFORMATION = 2
@@ -29,9 +29,9 @@ def generate_states_moving_rows(pMatrix, pOpenStates, pClosedStates):
 
 def select_transformation_type(pType):
     if pType == T_LEFT:
-        return move_row_to_left
+        return rotation_m.move_row_to_left
     elif pType == T_RIGHT:
-        return move_row_to_right
+        return rotation_m.move_row_to_right
 
 def is_matrix_on_states(pMatrix, pOpenStates, pClosedStates):
     states = [pOpenStates, pClosedStates]
