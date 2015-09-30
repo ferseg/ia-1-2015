@@ -11,6 +11,21 @@ example_mat = [[constants_m.E, constants_m.H, constants_m.E, constants_m.E],
 
 
 
+
+
+def search_algorithm(pInitialState,pOpenStates,pCloseStates):
+    #states = get_moves_states()
+    #for element in states:
+        #if search_in_close(pInitialState,pCloseStates):
+            #
+        #if search_in_open(pInitialState,pOpenStates):
+            #
+        #
+
+
+
+
+
 # Contains all the states that are open
 open_states = []
 
