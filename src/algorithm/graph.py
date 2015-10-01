@@ -4,36 +4,50 @@ from rotation_module import *
 import constants_module as constants_m
 import time
 
-example_mat = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
-	        (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
-		(constants_m.O, constants_m.G, constants_m.O, constants_m.G),
-		(constants_m.G, constants_m.P, constants_m.G, constants_m.Y),
-		(constants_m.Y, constants_m.O, constants_m.Y, constants_m.P))
+cost = {}
 
-example_mat2 = ((constants_m.E, constants_m.Y, constants_m.E, constants_m.E),
- 	        (constants_m.P, constants_m.O, constants_m.P, constants_m.H),
-		(constants_m.O, constants_m.G, constants_m.O, constants_m.G),
-		(constants_m.Y, constants_m.P, constants_m.G, constants_m.Y),
-		(constants_m.G, constants_m.O, constants_m.Y, constants_m.P))
-
-example_matX = ((constants_m.E, constants_m.E, constants_m.E, constants_m.H),
-	        (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
-		(constants_m.O, constants_m.G, constants_m.G, constants_m.G),
-		(constants_m.Y, constants_m.P, constants_m.O, constants_m.Y),
-		(constants_m.G, constants_m.O, constants_m.Y, constants_m.P))
-
-example_matY = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
-	        (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
-		(constants_m.O, constants_m.G, constants_m.O, constants_m.G),
-		(constants_m.G, constants_m.P, constants_m.G, constants_m.Y),
-		(constants_m.Y, constants_m.Y, constants_m.O, constants_m.P))
+cost[0] = 54
+cost[1] = 18
+cost[2] = 9
+cost[3] = 3
+cost[4] = 1
 
 
-example_matZ = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
-	        (constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
-		(constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
-		(constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
-		(constants_m.P, constants_m.Y, constants_m.O, constants_m.G))
+mat = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+       (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
+       (constants_m.O, constants_m.G, constants_m.O, constants_m.G),
+       (constants_m.G, constants_m.P, constants_m.G, constants_m.Y),
+       (constants_m.Y, constants_m.O, constants_m.Y, constants_m.P))
+
+mat_swap_v = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+              (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
+              (constants_m.O, constants_m.G, constants_m.O, constants_m.G),
+              (constants_m.Y, constants_m.P, constants_m.G, constants_m.Y),
+              (constants_m.G, constants_m.O, constants_m.Y, constants_m.P))
+
+mat_swap_h = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+              (constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
+              (constants_m.O, constants_m.G, constants_m.O, constants_m.G),
+              (constants_m.Y, constants_m.P, constants_m.G, constants_m.Y),
+              (constants_m.G, constants_m.O, constants_m.Y, constants_m.P))
+
+matX = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+	(constants_m.P, constants_m.Y, constants_m.P, constants_m.O),
+	(constants_m.O, constants_m.G, constants_m.O, constants_m.G),
+	(constants_m.G, constants_m.P, constants_m.G, constants_m.Y),
+	(constants_m.Y, constants_m.Y, constants_m.O, constants_m.P))
+
+matY = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+       (constants_m.P, constants_m.P, constants_m.Y, constants_m.O),
+       (constants_m.O, constants_m.G, constants_m.O, constants_m.G),
+       (constants_m.G, constants_m.P, constants_m.G, constants_m.Y),
+       (constants_m.Y, constants_m.O, constants_m.Y, constants_m.P))
+
+matZ = ((constants_m.E, constants_m.H, constants_m.E, constants_m.E),
+	(constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
+	(constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
+	(constants_m.P, constants_m.Y, constants_m.O, constants_m.G),
+	(constants_m.P, constants_m.Y, constants_m.O, constants_m.G))
 
 def neighbors(pMatrix):
     result = get_notch_moves(pMatrix)
@@ -42,15 +56,16 @@ def neighbors(pMatrix):
 
 def heuristic(current, goal):
     result = 0
-    for row_index,row in enumerate(current):
-        #if row_index == 0:
-        #    pass
-        for column_index,element in enumerate(row):
-            if element != goal[row_index][column_index]:
-                result += 1
-                #result += (row_index+1)
-                #result += cost[row_index]
-    
+    if current[3:] == goal[3:]:
+        for row_index,row in enumerate(current):
+            for column_index,element in enumerate(row):
+                if element != goal[row_index][column_index]:
+                    result += 1
+    else:
+        for row_index,row in enumerate(current):
+            for column_index,element in enumerate(row):
+                if element != goal[row_index][column_index]:
+                    result += cost[row_index]
     return result
 
 def a_star_search(start, goal):
@@ -85,10 +100,10 @@ def reconstruct_path(came_from, start, goal):
 
 
 start = time.time()
-parents,cost_so_far = a_star_search(example_mat, example_matY)
+parents,cost_so_far = a_star_search(mat, matZ)
 end = time.time()
 print(end-start)
-reconstruct_path(parents,example_mat,example_matY)
+reconstruct_path(parents,mat,matZ)
 
 
     
