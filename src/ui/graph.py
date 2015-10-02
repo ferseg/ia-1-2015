@@ -50,8 +50,7 @@ def reconstruct_path(came_from, start, goal):
         current = came_from[current]
         path.append(current)
     path.reverse()
-    for element in path:
-        print(element)
+    return path;
 
 
 
