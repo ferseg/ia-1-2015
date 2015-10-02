@@ -2,19 +2,18 @@ from tkinter import *;
 from DataFile import *;
 from graph import *;
 
-
-global UNDOARRAY;
-UNDOARRAY = [];
-
-global REDOARRAY;
-REDOARRAY = [];
-
 #---------------------------------------------MENÚ-------------------------------------------------#
 
 global WIDTH;
 WIDTH = 1280;
 global HEIGHT;
 HEIGHT= 700;
+
+global CURR_STATE;
+CURR_STATE = 0;
+
+global ea;
+ea = [];
 
 window = Tk();
 window.title("Torre de Babilonia");
@@ -37,6 +36,7 @@ boptions['background'] = 'white';
 boptions['borderwidth'] = '0';
 
 
+
 boptions2 = boptions.copy();
 boptions2['activebackground'] = 'white';
 boptions2['activeforeground'] = '#545454';
@@ -46,30 +46,14 @@ boptions2['pady'] = '5';
 boptions2['relief'] = 'ridge';
 boptions2['cursor'] = 'hand2';
 
-undo_btn = Button(window, **boptions);
-undo_img = PhotoImage(file = "imgs/undo.gif", width= 25, height = 25);
-undo_btn.configure(image = undo_img);
-#undo_btn.place(x = WIDTH - 225, y = 40);
-
-undo_lbl = Label(window, text="Deshacer", font=('Arial','8'), background='white');
-#undo_lbl.place(x = WIDTH - 240, y = 70);
-
-redo_btn = Button(window, **boptions);
-redo_img = PhotoImage(file = "imgs/redo.gif", width= 25, height = 25);
-redo_btn.configure(image = redo_img);
-#redo_btn.place(x = WIDTH - 175, y = 40);
-
-redo_lbl = Label(window, text="Rehacer", font=('Arial','8'), background='white');
-#redo_lbl.place(x = WIDTH - 183, y = 70);
-
 reset_btn = Button(window, text="Reiniciar", command = lambda: reset(), **boptions2);
 reset_btn.place(x = 400, y = 140);
 
 save_btn = Button(window, text=" Guardar", command = lambda: save(), **boptions2);
 save_btn.place(x = 400, y = 180);
 
-save_btn = Button(window, text=" Ejecutar", command = lambda: execute(), **boptions2);
-save_btn.place(x = 400, y = 220);
+exec_btn = Button(window, text=" Ejecutar", command = lambda: execute(), **boptions2);
+exec_btn.place(x = 400, y = 220);
 
 #-------------------------------------FILAS Y COLUMNAS--------------------------------------------#
 
@@ -89,10 +73,19 @@ init_state_file_btn.place(x = 130, y = 190);
 final_state_file_btn = Button(window, text = "Cargar estado final desde archivo", command = lambda: openFile(1), **boptions2);
 final_state_file_btn.place(x = 560, y = 190);
 
+finish_lbl = Label(window, text = "Estado objetivo alcanzado!",
+                       font = ('Arial','10'), background='#fafafa');
+
 arriba = PhotoImage(file = 'imgs/up.png');
 abajo = PhotoImage(file = 'imgs/down.png');
 izquierda = PhotoImage(file = 'imgs/left.png');
 derecha = PhotoImage(file = 'imgs/right.png');
+
+prev_btn = Button(window, command = lambda: prevState(), **boptions2);
+prev_btn.configure(image = izquierda);
+
+next_btn = Button(window, command = lambda: nextState(), **boptions2);
+next_btn.configure(image = derecha);
 
 blanco = PhotoImage(file = 'imgs/blanco2.png');
 azul = PhotoImage(file = 'imgs/azul2.png');
@@ -126,6 +119,7 @@ boptions['cursor'] = 'hand2';
 
 estados = [[],[], [-1,-1,-1]];  # 0 -> inicial, 1 -> final, 2 -> seleccionado
 flechas = [[],[]];
+allFlechas = [[],[]];
 
 xInicial = 75;
 yInicial = 250;
@@ -198,6 +192,9 @@ def iniciarInterfaz():
                 if isMuesca:
                     flechas[0].append([flechaI,y,x]);
                     flechas[1].append([flechaF,y,x]);
+                else:
+                    allFlechas[0].append([flechaI,y,x]);
+                    allFlechas[1].append([flechaF,y,x]);
                     
         #}
             
@@ -227,6 +224,8 @@ def selectBtn(fila, col, estado):
     if(str(estados[estado][fila][col].cget('image')) != str(blanco)):
         estados[-1] = [fila, col, estado];
         toggleBtn(fila, col, estado, 1);
+    else:
+        ea.append(2);
 #}
 
 
@@ -252,7 +251,7 @@ def moveBtn(fila, col, estado):
         
         return 1;
     else:
-        print("ERROR");
+        printErrorMsg("Solamente puede mover esferas en el mismo estado");
         return -1;        
 #}
 
@@ -292,6 +291,12 @@ def moveArrows(posMuesca, col, estado):
         
 #}
 
+def goea():
+#{    
+    if(ea == [1,1,2,-1,-1]):
+        ea_lbl.place(x = WIDTH / 2 - 320, y = HEIGHT / 2 - 242);
+#}
+
 def updateMov(fila, col, estado):
 #{
             
@@ -317,6 +322,11 @@ def getPosMuesca(estado):
     return -1;
 #}
 
+
+ea_lbl = Label(window);
+pug = PhotoImage(file = 'imgs/pug.png');
+ea_lbl.configure(image = pug);
+
 def moveH(fila, dire, estado):
 #{
     estados[-1] = [-1,-1,-1];
@@ -340,6 +350,10 @@ def moveH(fila, dire, estado):
 
     nuevaPos = rowHasEmptySpace(fila, estado);
     moveArrows(posActualMuesca, nuevaPos, estado);    
+
+    ea.append(-1);
+    if(len(ea) == 5):
+        goea();
     
     if(nuevaPos != -1):
         updateMov(fila, nuevaPos, estado);
@@ -364,6 +378,8 @@ def moveV(col, dire, estado):
     elif (posSiguiente) > 5:
         posSiguiente = 5;
 
+    ea.append(1);
+    
     nextImg = estados[estado][posSiguiente][col - 1].cget('image');
 
     if(str(nextImg) != ''):
@@ -376,20 +392,22 @@ def moveV(col, dire, estado):
 
 #------------------------------------------ERRORES------------------------------------------------#
 
+canvas.create_rectangle(855, 100, 1255, HEIGHT - 50, fill="#efefef", outline = 'white');
+
 canvas.create_line(840, 75 , 840, HEIGHT - 25, fill="#777777")
 
-canvas.create_rectangle(855, 100, 1255, HEIGHT - 50, fill="#efefef", outline = 'white');
+canvas.create_line(875, 387 , 1235, 387, fill="#777777")
 
 errors_lbl = Label(window, text = "Log de Errores",
                    font=('Arial','13'), background='#efefef');
-errors_lbl.place(x = 990, y = 115);
+errors_lbl.place(x = 1010, y = 400);
 
 scrollbar = Scrollbar(window);
 
-errors_listbox = Listbox(window, width = 45, height = 24, bd = 0,
+errors_listbox = Listbox(window, width = 45, height = 8, bd = 0,
                          font = ('Arial','11'),
                          yscrollcommand = scrollbar.set);
-errors_listbox.place(x = 875, y = 150);
+errors_listbox.place(x = 875, y = 430);
 
 scrollbar.config(command = errors_listbox.yview);
 
@@ -413,14 +431,73 @@ def explore_error():
         explanation = "";
         if(error == "Seleccione primero un error para ver más detalles"):
             explanation = "Para poder ver la información respecto a un error, es necesario hacer click al texto del error";
+        elif(error == "Seleccione primero la ayuda para ver más detalles"):
+            explanation = "Para poder ver la información respecto a la ayuda, es necesario hacer click al texto de ayuda";
         elif(error == "Muesca mal colocada o cantidad incorrecta de bolitas"):
             explanation = "En el archivo de texto se colocó una cantidad menor o mayor que 4 bolitas de colores o más de 1 muesca vacía.\nRecuerde que el máximo número de bolitas de colores permitido es de 4 para cada color y solamente una muesca o espacio vacío";
+        elif (error == "Solamente puede mover esferas en el mismo estado"):
+            explanation = "Si mueve esferas solamente puede intercambiar su posición si escoge dos esferas en la matriz del mismo estado";
         else:
             explanation = "En el archivo de texto se ingresaron incorrectamente las filas, ya sea porque hay filas repetidas o tienen asignado un número mayor o inferior para la fila.\nRecuerde que el formato para las filas es F1, F2, F3 y F4";
 
         
         messagebox.showinfo("Detalles del error", error + ":\n\n" + explanation);
 #}
+
+
+#------------------------------------------AYUDA------------------------------------------------#
+
+help_lbl = Label(window, text = "Ayuda",
+                   font=('Arial','13'), background='#efefef');
+help_lbl.place(x = 1035, y = 115);
+
+scrollbar = Scrollbar(window);
+
+help_listbox = Listbox(window, width = 45, height = 10, bd = 0,
+                         font = ('Arial','11'),
+                         yscrollcommand = scrollbar.set);
+
+help_listbox.place(x = 875, y = 150);
+
+scrollbar.config(command = help_listbox.yview);
+
+help_help = Button(window, text = "Mostrar ayuda",
+                    command = lambda : explore_help() ,**boptions2);
+help_help.place(x = 1015, y = 340);
+
+helpText = [["1. Cargar estado desde archivo",
+             "Para cargar el estado desde un archivo, haga click al botón del estado correspondiente, luego en el explorador de archivos ubique su archivo.\nFinalmente, seleccione abrir."],
+            ["2. Reiniciar estados",
+             "Para regresar la matriz de esferas de los estados a su estado original, presione el botón Reiniciar"],
+            ["3. Guardar estados",
+             "Puede guardar el estado actual de los estados en archivos de texto para poder ser utilizados después, haciendo click en el botón 'Guardar'"],
+            ["4. Ejecutar algoritmo",
+             "Para encontrar la solución mediante el algoritmo A*, presione el boton 'Ejecutar'. No podrá modificar los estados una vez que haya confirmado esta opción."],
+            ["5. Mover esferas libremente",
+             "Puede seleccionar una esfera haciendo click sobre ella y, si presiona otra esfera, puede intercambiar sus posiciones.\nSolamente funciona con esferas de la misma matriz de estado.\nNo puede mover libremente la muesca vacia"],
+            ["6. Mover esferas con las flechas",
+             "Puede mover las esferas presionando las flechas de los lados.\nLas flechas del lado derecho representan la rotación a la derecha del juguete. De igual forma con las flechas del lado izquierdo.\nPuede regresar fácilmente al estado anterior presionando la flecha del lado opuesto."],
+            ["7. Mover la muesca vacía",
+             "Para mover la muesca verticalmente, necesita hacer click en las flechas posicionaas verticalmente (en dirección hacia arriba y hacia abajo).\nPara mover la muesca horizontalmente, se haría presionando las flechas de los lados de la fila en donde está ubicada la muesca."],
+            ["8. Ver info. de un error",
+             "Para ver más detalles sobre un error, primero haga click en el texto del error, seguidamente haga click en el boton 'Explorar Error'"],            
+            ];
+
+
+for txt in helpText:
+        help_listbox.insert(END, txt[0]);
+        
+def explore_help():
+#{
+    selected_index = help_listbox.curselection();
+    if(len(selected_index) == 0):
+        printErrorMsg("Seleccione primero la ayuda para ver más detalles");
+    else:
+        selected_index = selected_index[0];
+        messagebox.showinfo("Ayuda", helpText[selected_index][0] + ":\n\n" + helpText[selected_index][1]);
+#}
+
+
 
 
 
@@ -443,15 +520,21 @@ def openFile(state):
     clear_variables();
 #}
 
-def reset_state():
-#{
+def reset_state(action):
+#{    
     for estado in range(0,2):
-            for fila in range (1,6):
-                for col in range(0,4):
-                    #print(estados[estado][fila][col]);
-                    estados[estado][fila][col].place_forget();
-    moveArrows(-100,0,0);
-    iniciarInterfaz(); 
+        for fila in range (1,6):
+            for col in range(0,4):                
+                estados[estado][fila][col].place_forget();
+                if(action == 1):
+                    estados[estado][fila][col].configure(command = lambda : '');
+
+        for flecha in allFlechas[estado]:
+            flecha[0].place_forget();
+            
+    moveArrows(-100,0,0);        
+    if(action == 0):        
+        iniciarInterfaz(); 
 #}
 
 def reset():
@@ -459,7 +542,7 @@ def reset():
     if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
         global matrix_tuple;
         matrix_tuple = ();
-        reset_state();
+        reset_state(0);
         errors_listbox.delete(0, END);
 #}
 
@@ -519,19 +602,28 @@ def tuplify(state):
     return new_tuple;
 #}
 
-def execute():
+def firstRowFormated(tup):
 #{
-    if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
-                              "\nNo podrá volver a modificar los estados")):
-    #{
-        initial_state_tuple = tuplify(0);
-        final_state_tuple = tuplify(1);        
-        start = time.time();
-        parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
-        end = time.time();
-        reconstruct_path(parents,initial_state_tuple, final_state_tuple);
+    for c in range(0, 4):
+        if tup[c] != -1:
+            return [tup[c],c];
+#}
 
-    #}
+def listify(tup):
+#{    
+    new_list = [];
+
+    for row in range(0, 5):
+        new_row = [];
+        if( row == 0 ):
+            new_row.append(firstRowFormated(tup[0]));
+        else:
+            for col in range(0, 4):
+                new_row.append(tup[row][col]);
+
+        new_list.append(new_row);
+
+    return new_list;
 #}
 
 def matrizTranspuesta(matrix, state):
@@ -550,16 +642,16 @@ def matrizTranspuesta(matrix, state):
     
         new_matrix.append(new_row);
     #}
-    loadState(new_matrix.copy(), state);
+    loadState(new_matrix.copy(), state, 1);
 #}
 
-def loadState(new_matrix, state):
+def loadState(new_matrix, state, action):
 #{    
     for row in range(0,5):    
         for col in range(0,len(new_matrix[row])):
             if(row != 0):
                 value = new_matrix[row][col];
-                if(value == 4):                    
+                if(value == 4 and action == 1):                    
                     moveArrows(0, col, state);
                     updateMov(row + 1,col,state);
                 estados[state][row + 1][col].configure(image = colores[value]);
@@ -567,11 +659,98 @@ def loadState(new_matrix, state):
                 value = new_matrix[0][0][0];
                 ball_pos = new_matrix[0][0][1];                
                 estados[state][1][0].configure(image = colores[value]);
-                for x in range(0,ball_pos):
-                    moveH(1,-1,state);    
+                if(action == 1):
+                    for x in range(0,ball_pos):
+                        moveH(1,-1,state);    
 #}                    
                     
 #--------------------------------------------MAIN-----------------------------------------------
+
+def drawNewGrid():
+#{
+    reset_state(1);
+
+    for estado in range(0,2):
+        for fila in range (1,6):
+            for col in range(0,4):
+                if(estado == 0):                    
+                    estados[estado][fila][col].place(x = (140 + (50 * col)),
+                                                     y = (170 + (50 * fila)));
+                else:
+                    estados[estado][fila][col].place(x = (145 + 415 + (50 * col)),
+                                                     y = (170 + (50 * fila)));
+                
+    
+    reset_btn.place_forget();
+    save_btn.place_forget();    
+    exec_btn.place_forget();
+    init_state_file_btn.place_forget();
+    final_state_file_btn.place_forget();
+    init_state_lbl.configure(text = "Estado Actual");    
+    
+    prev_btn.place(x = 155, y = 480);
+    prev_btn.configure(state = 'disabled');
+    
+    prev_lbl = Label(window, text = "Estado\n Anterior",
+                       font = ('Arial','8'), background='#fafafa');
+    prev_lbl.place(x = 150, y = 525);
+
+    next_btn.place(x = 265, y = 480);
+
+    next_lbl = Label(window, text = "Estado\nSiguiente",
+                       font = ('Arial','8'), background='#fafafa');
+    next_lbl.place(x = 260, y = 525);
+    
+    
+#}
+
+def execute():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
+                              "\nNo podrá volver a modificar los estados")):
+    #{
+        initial_state_tuple = tuplify(0);
+        final_state_tuple = tuplify(1);        
+        start = time.time();
+        parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
+        end = time.time();
+        print(end - start);
+        global states;
+        states = reconstruct_path(parents,initial_state_tuple, final_state_tuple);
+
+        if(len(states) == 1):
+            next_btn.configure(state = 'disabled');
+            finish_lbl.place(x = 375, y = HEIGHT/2);
+            
+        drawNewGrid();
+    #}
+#}
+
+
+
+def prevState():
+#{
+    global CURR_STATE;
+    if(CURR_STATE > 0):        
+        CURR_STATE -= 1;
+        loadState(listify(states[CURR_STATE]),0,-1);
+        next_btn.configure(state = 'normal');
+        finish_lbl.place_forget();
+        if( CURR_STATE == 0):
+            prev_btn.configure(state = 'disabled');
+#}
+
+def nextState():
+#{
+    global CURR_STATE;
+    if(CURR_STATE < len(states) - 1):        
+        CURR_STATE += 1;
+        loadState(listify(states[CURR_STATE]),0,-1);
+        prev_btn.configure(state = 'normal');
+        if(CURR_STATE == len(states) - 1):
+            next_btn.configure(state = 'disabled');
+            finish_lbl.place(x = 370, y = HEIGHT/2);
+#}
 
 iniciarInterfaz();
 
