@@ -1,4 +1,4 @@
-F1=B,H,O,R,O
-F2=R,O,O,B
-F3=G,R,B,G
-F4=G,B,R,G
+F1=B,B,H,B,B
+F2=O,O,O,O
+F3=G,G,G,G
+F4=R,R,R,R

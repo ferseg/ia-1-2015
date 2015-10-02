@@ -28,6 +28,6 @@ def load_matrix(path):
     #get the first structure of a babylon tower
     babylon_tower = get_babylon_tower(file_text);
     #print the rows of the regex applied to the .txt input file
-    get_babylon_tower_rows(babylon_tower);
+    #get_babylon_tower_rows(babylon_tower);
     #apply all the validations to the babylon tower entered
     return validate_tower(babylon_tower);

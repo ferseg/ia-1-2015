@@ -1,5 +1,7 @@
 from tkinter import *;
 from DataFile import *;
+from graph import *;
+
 
 global UNDOARRAY;
 UNDOARRAY = [];
@@ -65,6 +67,9 @@ reset_btn.place(x = 400, y = 140);
 
 save_btn = Button(window, text=" Guardar", command = lambda: save(), **boptions2);
 save_btn.place(x = 400, y = 180);
+
+save_btn = Button(window, text=" Ejecutar", command = lambda: execute(), **boptions2);
+save_btn.place(x = 400, y = 220);
 
 #-------------------------------------FILAS Y COLUMNAS--------------------------------------------#
 
@@ -432,7 +437,7 @@ def openFile(state):
     if isinstance(matrix, str):
         printErrorMsg(matrix);
     else:
-        loadState(matrix,state);
+        matrizTranspuesta(matrix,state);
 
     
     clear_variables();
@@ -452,6 +457,8 @@ def reset_state():
 def reset():
 #{
     if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
+        global matrix_tuple;
+        matrix_tuple = ();
         reset_state();
         errors_listbox.delete(0, END);
 #}
@@ -497,20 +504,57 @@ def save():
     
 #}
 
-def loadState(matrix, state):
-#{            
+def tuplify(state):
+#{    
+    new_tuple = ();
+
+    for row in range(1,6):
+        new_row = ();
+        for col in range(0,4):
+            index = get_index(str(estados[state][row][col].cget('image')));
+            new_row += (index,);
+
+        new_tuple += (new_row,);        
+
+    return new_tuple;
+#}
+
+def execute():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
+                              "\nNo podrá volver a modificar los estados")):
+    #{
+        initial_state_tuple = tuplify(0);
+        final_state_tuple = tuplify(1);        
+        start = time.time();
+        parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
+        end = time.time();
+        reconstruct_path(parents,initial_state_tuple, final_state_tuple);
+
+    #}
+#}
+
+def matrizTranspuesta(matrix, state):
+#{
     new_matrix = [];
-    for row in range(4,-1,-1):        
-        new_row = [];
+
+    for row in range(4,-1,-1):
+    #{
+        new_row = [];        
         for col in range(0,4):            
             value = matrix[col][row]; 
-            if row != 4:
+            if row != 4:                                
                 new_row.append(value);
             elif value != -1:                
-                new_row.append([value,col]);
-                
-        new_matrix.append(new_row);
+                new_row.append([value,col]);            
     
+        new_matrix.append(new_row);
+    #}
+    loadState(new_matrix.copy(), state);
+#}
+
+def loadState(new_matrix, state):
+#{    
     for row in range(0,5):    
         for col in range(0,len(new_matrix[row])):
             if(row != 0):
