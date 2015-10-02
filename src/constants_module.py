@@ -41,8 +41,12 @@ COST[3] = 3/85
 COST[4] = 1/85
 COST[5] = 1/16
 
-
-
+COST_BOT = {}
+COST_BOT[0] = 54/85
+COST_BOT[1] = 18/85
+COST_BOT[2] = 9/85
+COST_BOT[3] = 3/85
+COST_BOT[4] = 1/85
 
 mat = ((E, H, E, E),
        (B, R, B, O),

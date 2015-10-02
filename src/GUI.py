@@ -1,6 +1,6 @@
-from tkinter import *
-from DataFile import *
-from graph import *
+from tkinter import *;
+from DataFile import *;
+from graph import *;
 
 #---------------------------------------------MENÚ-------------------------------------------------#
 
@@ -751,3 +751,16 @@ def nextState():
 #}
 
 iniciarInterfaz();
+
+
+
+
+
+
+
+
+
+
+
+
+
