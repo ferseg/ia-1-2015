@@ -709,15 +709,13 @@ def execute():
     if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
                               "\nNo podrá volver a modificar los estados")):
     #{
+        global states;
         initial_state_tuple = tuplify(0);
         final_state_tuple = tuplify(1);        
         start = time.time();
-        parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
+        states = a_star_search(initial_state_tuple, final_state_tuple);
         end = time.time();
         print(end - start);
-        global states;
-        states = reconstruct_path(parents,initial_state_tuple, final_state_tuple);
-
         if(len(states) == 1):
             next_btn.configure(state = 'disabled');
             finish_lbl.place(x = 375, y = HEIGHT/2);

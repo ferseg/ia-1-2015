@@ -9,10 +9,10 @@ def init_notch(pBabylonTower):
     [space_row,space_column] = set_free_space(pBabylonTower)
 
     while notch_column != space_column:
-        pBabylonTower = shift(pBabylonTower,space_row,K.RIGHT)
+        pBabylonTower = shift(pBabylonTower,space_row,K.RIGHT)[0]
         [space_row,space_column] = set_free_space(pBabylonTower)
     while notch_row != 0:
-        pBabylonTower = move_up(pBabylonTower,notch_row,notch_column)
+        pBabylonTower = move_up(pBabylonTower,notch_row,notch_column,0)[0]
         notch_row -= 1
     return pBabylonTower
 

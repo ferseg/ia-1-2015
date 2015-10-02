@@ -1,8 +1,4 @@
-F0=P,O,G,Y
-F1=P,G,O,O
-F1=P,G,Y,O
-F2=G,P,O,Y
-F3=P,O,G,Y,O
-F4=P,G,O,Y
-F5=P,P,P,P
-f1=H,H,H,H
+F1=B,B,B,B,H
+F4=O,O,O,O
+F3=G,G,G,G
+F2=R,R,R,R

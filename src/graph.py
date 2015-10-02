@@ -21,16 +21,18 @@ def heuristic(current, goal):
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
                     result += constants_m.COST[5]
-    else:
+    elif current[4] == goal[4]:
         for row_index,row in enumerate(current):
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
                     result += constants_m.COST[row_index]
+    else:
+        
     return result
 
 def a_star_search(start, goal):
-    #start = init_notch(pStart)
-    #goal = init_notch(pGoal)
+    start = init_notch(start)
+    goal = init_notch(goal)
     frontier = PriorityQueue()
     frontier.put(start, 0)
     came_from = {}
@@ -67,9 +69,11 @@ def reconstruct_path(came_from,labels_to, start, goal):
         labels.append(current_label)
     labels.reverse()
     path.reverse()
+    index = 1
     for index,element in enumerate(path):
         txt = labels[index]
         if txt != None:
+            txtContent += constants_m.STEP + str(index)+".\n"
             txtContent += txt + "\n"
         for row in element:
             txtContent += "("
@@ -77,6 +81,7 @@ def reconstruct_path(came_from,labels_to, start, goal):
                 txtContent += constants_m.COLOR_DIC[entry]
             txtContent += ")\n"
         txtContent += "\n"
+        index += 1
     writer = FileReader(constants_m.TXT_NAME,"w+")
     writer.write(txtContent)
     writer.closeFile()

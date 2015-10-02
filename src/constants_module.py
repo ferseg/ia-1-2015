@@ -5,8 +5,8 @@ R = 3
 H = 4
 E = -1
 
-TXT_NAME = "path"
-
+TXT_NAME = "path.txt"
+STEP = "Paso #"
 
 COLOR_DIC = {}
 COLOR_DIC[-1] = " Wall   "

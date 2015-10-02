@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from tkinter import *
 from DataFile import *
 from graph import *
+=======
+from tkinter import *;
+from DataFile import *;
+from graph import *;
+>>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
 
 #---------------------------------------------MENÚ-------------------------------------------------#
 
@@ -439,6 +445,12 @@ def explore_error():
             explanation = "Si mueve esferas solamente puede intercambiar su posición si escoge dos esferas en la matriz del mismo estado";
         else:
             explanation = "En el archivo de texto se ingresaron incorrectamente las filas, ya sea porque hay filas repetidas o tienen asignado un número mayor o inferior para la fila.\nRecuerde que el formato para las filas es F1, F2, F3 y F4";
+<<<<<<< HEAD
+
+        
+        messagebox.showinfo("Detalles del error", error + ":\n\n" + explanation);
+#}
+=======
 
         
         messagebox.showinfo("Detalles del error", error + ":\n\n" + explanation);
@@ -483,6 +495,317 @@ helpText = [["1. Cargar estado desde archivo",
              "Para ver más detalles sobre un error, primero haga click en el texto del error, seguidamente haga click en el boton 'Explorar Error'"],            
             ];
 
+
+for txt in helpText:
+        help_listbox.insert(END, txt[0]);
+        
+def explore_help():
+#{
+    selected_index = help_listbox.curselection();
+    if(len(selected_index) == 0):
+        printErrorMsg("Seleccione primero la ayuda para ver más detalles");
+    else:
+        selected_index = selected_index[0];
+        messagebox.showinfo("Ayuda", helpText[selected_index][0] + ":\n\n" + helpText[selected_index][1]);
+#}
+
+
+
+
+
+#--------------------------------------FUNCIONES DEL MENÚ-----------------------------------------
+
+color_value = ["Blue","Orange","Green","Red","Space"];
+
+def openFile(state):
+#{
+    filename = filedialog.askopenfilename(**foptions);
+    #print(filename, state);
+    matrix = load_matrix(filename);
+
+    if isinstance(matrix, str):
+        printErrorMsg(matrix);
+    else:
+        matrizTranspuesta(matrix,state);
+
+    
+    clear_variables();
+#}
+
+def reset_state(action):
+#{    
+    for estado in range(0,2):
+        for fila in range (1,6):
+            for col in range(0,4):                
+                estados[estado][fila][col].place_forget();
+                if(action == 1):
+                    estados[estado][fila][col].configure(command = lambda : '');
+
+        for flecha in allFlechas[estado]:
+            flecha[0].place_forget();
+            
+    moveArrows(-100,0,0);        
+    if(action == 0):        
+        iniciarInterfaz(); 
+#}
+
+def reset():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea reiniciar los estados?")):
+        global matrix_tuple;
+        matrix_tuple = ();
+        reset_state(0);
+        errors_listbox.delete(0, END);
+#}
+
+def get_index(btn):
+#{
+    for i in range(0, len(colores)):
+        if( str(colores[i]) == btn ):
+            return i;
+    return -1;
+            
+#}
+
+def write_file(state):
+#{
+    filenames = ["est_inicial.txt","est_final.txt"];
+    file = open(filenames[state], mode = 'w');
+    letters = ["B","O","G","R","H"];
+
+    for col in range(0,4):
+        file.write("F" + str(col + 1) + "=");
+        for row in range(5,0,-1):                        
+            index = get_index(str(estados[state][row][col].cget('image')));
+            if index != -1:                
+                if row > 1:
+                    file.write(letters[index]);
+                if row > 2:
+                    file.write(',');
+                elif row == 1:
+                    file.write(',' + letters[index]);
+                                    
+        file.write("\n");
+    
+    file.close();                
+#}
+
+def save():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea guardar los estados?" +
+                              "\nEl archivo anterior sera sobreescrito")):
+        for state in range(0,2):
+            write_file(state);
+    
+#}
+
+def tuplify(state):
+#{    
+    new_tuple = ();
+
+    for row in range(1,6):
+        new_row = ();
+        for col in range(0,4):
+            index = get_index(str(estados[state][row][col].cget('image')));
+            new_row += (index,);
+>>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
+
+        new_tuple += (new_row,);        
+
+    return new_tuple;
+#}
+
+<<<<<<< HEAD
+#------------------------------------------AYUDA------------------------------------------------#
+
+help_lbl = Label(window, text = "Ayuda",
+                   font=('Arial','13'), background='#efefef');
+help_lbl.place(x = 1035, y = 115);
+
+scrollbar = Scrollbar(window);
+
+help_listbox = Listbox(window, width = 45, height = 10, bd = 0,
+                         font = ('Arial','11'),
+                         yscrollcommand = scrollbar.set);
+
+help_listbox.place(x = 875, y = 150);
+
+scrollbar.config(command = help_listbox.yview);
+
+help_help = Button(window, text = "Mostrar ayuda",
+                    command = lambda : explore_help() ,**boptions2);
+help_help.place(x = 1015, y = 340);
+
+helpText = [["1. Cargar estado desde archivo",
+             "Para cargar el estado desde un archivo, haga click al botón del estado correspondiente, luego en el explorador de archivos ubique su archivo.\nFinalmente, seleccione abrir."],
+            ["2. Reiniciar estados",
+             "Para regresar la matriz de esferas de los estados a su estado original, presione el botón Reiniciar"],
+            ["3. Guardar estados",
+             "Puede guardar el estado actual de los estados en archivos de texto para poder ser utilizados después, haciendo click en el botón 'Guardar'"],
+            ["4. Ejecutar algoritmo",
+             "Para encontrar la solución mediante el algoritmo A*, presione el boton 'Ejecutar'. No podrá modificar los estados una vez que haya confirmado esta opción."],
+            ["5. Mover esferas libremente",
+             "Puede seleccionar una esfera haciendo click sobre ella y, si presiona otra esfera, puede intercambiar sus posiciones.\nSolamente funciona con esferas de la misma matriz de estado.\nNo puede mover libremente la muesca vacia"],
+            ["6. Mover esferas con las flechas",
+             "Puede mover las esferas presionando las flechas de los lados.\nLas flechas del lado derecho representan la rotación a la derecha del juguete. De igual forma con las flechas del lado izquierdo.\nPuede regresar fácilmente al estado anterior presionando la flecha del lado opuesto."],
+            ["7. Mover la muesca vacía",
+             "Para mover la muesca verticalmente, necesita hacer click en las flechas posicionaas verticalmente (en dirección hacia arriba y hacia abajo).\nPara mover la muesca horizontalmente, se haría presionando las flechas de los lados de la fila en donde está ubicada la muesca."],
+            ["8. Ver info. de un error",
+             "Para ver más detalles sobre un error, primero haga click en el texto del error, seguidamente haga click en el boton 'Explorar Error'"],            
+            ];
+=======
+def firstRowFormated(tup):
+#{
+    for c in range(0, 4):
+        if tup[c] != -1:
+            return [tup[c],c];
+#}
+
+def listify(tup):
+#{    
+    new_list = [];
+
+    for row in range(0, 5):
+        new_row = [];
+        if( row == 0 ):
+            new_row.append(firstRowFormated(tup[0]));
+        else:
+            for col in range(0, 4):
+                new_row.append(tup[row][col]);
+
+        new_list.append(new_row);
+
+    return new_list;
+#}
+
+def matrizTranspuesta(matrix, state):
+#{
+    new_matrix = [];
+
+    for row in range(4,-1,-1):
+    #{
+        new_row = [];        
+        for col in range(0,4):            
+            value = matrix[col][row]; 
+            if row != 4:                                
+                new_row.append(value);
+            elif value != -1:                
+                new_row.append([value,col]);            
+    
+        new_matrix.append(new_row);
+    #}
+    loadState(new_matrix.copy(), state, 1);
+#}
+
+def loadState(new_matrix, state, action):
+#{    
+    for row in range(0,5):    
+        for col in range(0,len(new_matrix[row])):
+            if(row != 0):
+                value = new_matrix[row][col];
+                if(value == 4 and action == 1):                    
+                    moveArrows(0, col, state);
+                    updateMov(row + 1,col,state);
+                estados[state][row + 1][col].configure(image = colores[value]);
+            else:                
+                value = new_matrix[0][0][0];
+                ball_pos = new_matrix[0][0][1];                
+                estados[state][1][0].configure(image = colores[value]);
+                if(action == 1):
+                    for x in range(0,ball_pos):
+                        moveH(1,-1,state);    
+#}                    
+                    
+#--------------------------------------------MAIN-----------------------------------------------
+
+def drawNewGrid():
+#{
+    reset_state(1);
+
+    for estado in range(0,2):
+        for fila in range (1,6):
+            for col in range(0,4):
+                if(estado == 0):                    
+                    estados[estado][fila][col].place(x = (140 + (50 * col)),
+                                                     y = (170 + (50 * fila)));
+                else:
+                    estados[estado][fila][col].place(x = (145 + 415 + (50 * col)),
+                                                     y = (170 + (50 * fila)));
+                
+    
+    reset_btn.place_forget();
+    save_btn.place_forget();    
+    exec_btn.place_forget();
+    init_state_file_btn.place_forget();
+    final_state_file_btn.place_forget();
+    init_state_lbl.configure(text = "Estado Actual");    
+    
+    prev_btn.place(x = 155, y = 480);
+    prev_btn.configure(state = 'disabled');
+    
+    prev_lbl = Label(window, text = "Estado\n Anterior",
+                       font = ('Arial','8'), background='#fafafa');
+    prev_lbl.place(x = 150, y = 525);
+
+    next_btn.place(x = 265, y = 480);
+
+    next_lbl = Label(window, text = "Estado\nSiguiente",
+                       font = ('Arial','8'), background='#fafafa');
+    next_lbl.place(x = 260, y = 525);
+    
+    
+#}
+
+def execute():
+#{
+    if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
+                              "\nNo podrá volver a modificar los estados")):
+    #{
+        initial_state_tuple = tuplify(0);
+        final_state_tuple = tuplify(1);        
+        start = time.time();
+        parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
+        end = time.time();
+        print(end - start);
+        global states;
+        states = reconstruct_path(parents,initial_state_tuple, final_state_tuple);
+
+        if(len(states) == 1):
+            next_btn.configure(state = 'disabled');
+            finish_lbl.place(x = 375, y = HEIGHT/2);
+            
+        drawNewGrid();
+    #}
+#}
+
+
+
+def prevState():
+#{
+    global CURR_STATE;
+    if(CURR_STATE > 0):        
+        CURR_STATE -= 1;
+        loadState(listify(states[CURR_STATE]),0,-1);
+        next_btn.configure(state = 'normal');
+        finish_lbl.place_forget();
+        if( CURR_STATE == 0):
+            prev_btn.configure(state = 'disabled');
+#}
+
+def nextState():
+#{
+    global CURR_STATE;
+    if(CURR_STATE < len(states) - 1):        
+        CURR_STATE += 1;
+        loadState(listify(states[CURR_STATE]),0,-1);
+        prev_btn.configure(state = 'normal');
+        if(CURR_STATE == len(states) - 1):
+            next_btn.configure(state = 'disabled');
+            finish_lbl.place(x = 370, y = HEIGHT/2);
+#}
+>>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
+
+iniciarInterfaz();
 
 for txt in helpText:
         help_listbox.insert(END, txt[0]);

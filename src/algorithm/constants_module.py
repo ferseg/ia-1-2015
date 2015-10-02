@@ -5,6 +5,7 @@ R = 3
 H = 4
 E = -1
 
+<<<<<<< HEAD
 TXT_NAME = "path"
 
 
@@ -23,9 +24,13 @@ SHL_MESSAGE = "Rotación izquierda fila %i."
 NOTCH_DOWN_MESSAGE = "Mover muesca hacia abajo %i espacios."
 NOTCH_UP_MESSAGE = "Mover muesca hacia arriba %i espacios."
 
+=======
+>>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
 NOTCH_SYMBOL = 4
 UP = -1
 DOWN = 1
+<<<<<<< HEAD
+=======
 RIGHT = 1
 LEFT = -1
 
@@ -91,9 +96,13 @@ mm = ((-1,-1,-1,4),
  (3,3,3,3))
 
 
+<<<<<<< HEAD
 mn = ((-1,-1,-1,4),
  (3,3,3,3),
  (2,2,2,2),
  (1,1,1,1),
  (0,0,0,0))
+=======
+>>>>>>> ec4cafcb03785eb1dcf17bf0c88bc84e61c25281
+>>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
 
