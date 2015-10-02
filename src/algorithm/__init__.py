@@ -8,6 +8,8 @@ from .movement_module import *
 
 from .rotation_module import *
 
+from .FileReader import *
+
 from .graph import *
 
 

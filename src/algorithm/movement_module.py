@@ -1,13 +1,35 @@
 import constants_module as K
+from rotation_module import *
+
+
+notch_pos = 0
+
+def init_notch(pBabylonTower):
+    [notch_row,notch_column] = set_notch(pBabylonTower)
+    [space_row,space_column] = set_free_space(pBabylonTower)
+
+    while notch_column != space_column:
+        pBabylonTower = shift(pBabylonTower,space_row,K.RIGHT)
+        [space_row,space_column] = set_free_space(pBabylonTower)
+    while notch_row != 0:
+        pBabylonTower = move_up(pBabylonTower,notch_row,notch_column)
+        notch_row -= 1
+    return pBabylonTower
 
 def set_notch(pBabylonTower):
     for row_index, row in enumerate(pBabylonTower):
         for col_index, element in enumerate(row):
             if element == K.NOTCH_SYMBOL:
                 return [row_index,col_index]
-                
 
-def move_up(pBabylonTower,notch_row,notch_column):
+def set_free_space(pBabylonTower):
+    for row_index, row in enumerate(pBabylonTower):
+        for col_index, element in enumerate(row):
+            if element != K.E:
+                return [row_index,col_index]
+
+
+def move_up(pBabylonTower,notch_row,notch_column,id_move):
     newState = ()
     newState += pBabylonTower[:notch_row-1]
 
@@ -20,9 +42,9 @@ def move_up(pBabylonTower,notch_row,notch_column):
                 pBabylonTower[notch_row][notch_column+1:],)
 
     newState += pBabylonTower[notch_row+1:]
-    return newState
+    return (newState,K.NOTCH_UP_MESSAGE.replace("%i",str(id_move)))
 
-def move_down(pBabylonTower,notch_row,notch_column):
+def move_down(pBabylonTower,notch_row,notch_column,id_move):
     newState = ()
     newState += pBabylonTower[:notch_row]
     
@@ -35,25 +57,44 @@ def move_down(pBabylonTower,notch_row,notch_column):
                 pBabylonTower[notch_row+1][notch_column+1:],)
     
     newState += pBabylonTower[notch_row+2:]
-    return newState
+    return (newState,K.NOTCH_DOWN_MESSAGE.replace("%i",str(id_move)))
 
 def move_notch(result,pBabylonTower,pMovements, pDirection,notch_row,notch_column):
     newState = ()
+    global notch_pos
     if pMovements != 0:
         if pDirection == K.UP:
-            newState = move_up(pBabylonTower,notch_row,notch_column)
+            newState = move_up(pBabylonTower,notch_row,notch_column,abs(notch_pos-notch_row-pDirection))
         else:
-            newState = move_down(pBabylonTower,notch_row,notch_column)
+            newState = move_down(pBabylonTower,notch_row,notch_column,abs(notch_pos-notch_row-pDirection))
         result += (newState,)
-        return move_notch(result,newState,pMovements-1,pDirection,notch_row+pDirection,notch_column)
+        return move_notch(result,newState[0],pMovements-1,pDirection,notch_row+pDirection,notch_column)
     else:
         return result
 
 def get_notch_moves(pBabylonTower):
     [notch_row,notch_column] = set_notch(pBabylonTower)
+    global notch_pos
+    notch_pos = notch_row
     result = []
     up_movements = notch_row
     down_movements = 4-notch_row
     result += move_notch([],pBabylonTower,up_movements,K.UP,notch_row,notch_column)
     result += move_notch([],pBabylonTower,down_movements,K.DOWN,notch_row,notch_column)
     return result
+
+"""
+print(K.mat)
+#print(move_down(K.mat,0,1))
+#print(move_notch([],K.mat,1,1,0,1))
+result = get_notch_moves(K.mat)
+for element in result:
+    print(element)
+
+((0, 3, 0, 1), (1, 2, 1, 2), (-1, 4, -1, -1), (2, 0, 2, 3), (3, 1, 3, 0))
+(((0, 3, 0, 1), (1, 4, 1, 2), (-1, 2, -1, -1), (2, 0, 2, 3), (3, 1, 3, 0)), 'Mover muesca hacia arriba 1 espacios.')
+(((0, 4, 0, 1), (1, 3, 1, 2), (-1, 2, -1, -1), (2, 0, 2, 3), (3, 1, 3, 0)), 'Mover muesca hacia arriba 2 espacios.')
+(((0, 3, 0, 1), (1, 2, 1, 2), (-1, 0, -1, -1), (2, 4, 2, 3), (3, 1, 3, 0)), 'Mover muesca hacia abajo 1 espacios.')
+(((0, 3, 0, 1), (1, 2, 1, 2), (-1, 0, -1, -1), (2, 1, 2, 3), (3, 4, 3, 0)), 'Mover muesca hacia abajo 2 espacios.')
+"""
+
