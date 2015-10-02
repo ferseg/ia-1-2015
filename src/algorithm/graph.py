@@ -82,11 +82,11 @@ def reconstruct_path(came_from,labels_to, start, goal):
     writer.closeFile()
     return path
 
-
+"""
 start = time.time()
 parents = a_star_search(constants_m.mat, constants_m.matZ)
 end = time.time()
 print(end-start)
-
+"""
     
 
