@@ -47,13 +47,15 @@ boptions2['relief'] = 'ridge';
 boptions2['cursor'] = 'hand2';
 
 reset_btn = Button(window, text="Reiniciar", command = lambda: reset(), **boptions2);
-reset_btn.place(x = 400, y = 140);
 
 save_btn = Button(window, text=" Guardar", command = lambda: save(), **boptions2);
-save_btn.place(x = 400, y = 180);
 
 exec_btn = Button(window, text=" Ejecutar", command = lambda: execute(), **boptions2);
-exec_btn.place(x = 400, y = 220);
+
+prev_lbl = Label(window, text = "Estado\n Anterior",
+                       font = ('Arial','8'), background='#fafafa');
+next_lbl = Label(window, text = "Estado\nSiguiente",
+                       font = ('Arial','8'), background='#fafafa');
 
 #-------------------------------------FILAS Y COLUMNAS--------------------------------------------#
 
@@ -68,10 +70,8 @@ final_state_lbl = Label(window, text = "Estado Final",
 final_state_lbl.place(x = 585, y = 150);
 
 init_state_file_btn = Button(window, text = "Cargar estado inicial desde archivo", command = lambda: openFile(0), **boptions2);
-init_state_file_btn.place(x = 130, y = 190);
 
 final_state_file_btn = Button(window, text = "Cargar estado final desde archivo", command = lambda: openFile(1), **boptions2);
-final_state_file_btn.place(x = 560, y = 190);
 
 finish_lbl = Label(window, text = "Estado objetivo alcanzado!",
                        font = ('Arial','10'), background='#fafafa');
@@ -125,6 +125,20 @@ xInicial = 75;
 yInicial = 250;
 
 def iniciarInterfaz():
+
+    reset_btn.place(x = 400, y = 140);
+    save_btn.place(x = 400, y = 180);
+    exec_btn.place(x = 400, y = 220);
+    init_state_file_btn.place(x = 130, y = 190);
+    final_state_file_btn.place(x = 560, y = 190);
+
+    prev_btn.place_forget()    
+    prev_lbl.place_forget()
+    next_btn.place_forget()    
+    next_lbl.place_forget();
+    finish_lbl.place_forget();
+    init_state_lbl.configure(text = "Estado Actual");
+
 
     estados[0] = [];
     estados[1] = [];
@@ -323,9 +337,7 @@ def getPosMuesca(estado):
 #}
 
 
-ea_lbl = Label(window);
-pug = PhotoImage(file = 'imgs/pug.png');
-ea_lbl.configure(image = pug);
+
 
 def moveH(fila, dire, estado):
 #{
@@ -508,16 +520,16 @@ color_value = ["Blue","Orange","Green","Red","Space"];
 def openFile(state):
 #{
     filename = filedialog.askopenfilename(**foptions);
-    #print(filename, state);
-    matrix = load_matrix(filename);
+    if(filename != ''):
+        matrix = load_matrix(filename);
 
-    if isinstance(matrix, str):
-        printErrorMsg(matrix);
-    else:
-        matrizTranspuesta(matrix,state);
+        if isinstance(matrix, str):
+            printErrorMsg(matrix);
+        else:
+            matrizTranspuesta(matrix,state);
 
     
-    clear_variables();
+        clear_variables();
 #}
 
 def reset_state(action):
@@ -680,25 +692,22 @@ def drawNewGrid():
                     estados[estado][fila][col].place(x = (145 + 415 + (50 * col)),
                                                      y = (170 + (50 * fila)));
                 
-    
-    reset_btn.place_forget();
     save_btn.place_forget();    
     exec_btn.place_forget();
     init_state_file_btn.place_forget();
     final_state_file_btn.place_forget();
     init_state_lbl.configure(text = "Estado Actual");    
-    
-    prev_btn.place(x = 155, y = 480);
+
+
     prev_btn.configure(state = 'disabled');
+    next_btn.configure(state = 'normal');
     
-    prev_lbl = Label(window, text = "Estado\n Anterior",
-                       font = ('Arial','8'), background='#fafafa');
+    prev_btn.place(x = 155, y = 480);    
+    
     prev_lbl.place(x = 150, y = 525);
 
-    next_btn.place(x = 265, y = 480);
-
-    next_lbl = Label(window, text = "Estado\nSiguiente",
-                       font = ('Arial','8'), background='#fafafa');
+    next_btn.place(x = 265, y = 480);    
+    
     next_lbl.place(x = 260, y = 525);
     
     
@@ -706,6 +715,8 @@ def drawNewGrid():
 
 def execute():
 #{
+    global CURR_STATE;
+    CURR_STATE = 0;
     if(messagebox.askokcancel("Alerta!","Desea ejecutar el algoritmo?" +
                               "\nNo podrá volver a modificar los estados")):
     #{
@@ -753,14 +764,6 @@ def nextState():
 iniciarInterfaz();
 
 
-
-
-
-
-
-
-
-
-
-
-
+ea_lbl = Label(window);
+pug = PhotoImage(file = 'imgs/pug.png');
+ea_lbl.configure(image = pug);
