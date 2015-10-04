@@ -25,7 +25,6 @@ def rotate_matrix_to_left(pMatrix):
     return result
 
 def shift(pBabylonTower,pRow,pDirection):
-<<<<<<< HEAD
     message = ""
     newRow = ()
     newState = ()
@@ -38,15 +37,6 @@ def shift(pBabylonTower,pRow,pDirection):
         message = constants_m.SHL_MESSAGE.replace("%i",str(pRow+1))
     newRow += pBabylonTower[pRow+1:]
     newState += (newRow,message)
-=======
-    newState = ()
-    newState += pBabylonTower[:pRow]
-    if pDirection == constants_m.RIGHT:
-        newState += (move_row_to_right(pBabylonTower[pRow]),)
-    else:
-        newState += (move_row_to_left(pBabylonTower[pRow]),)
-    newState += pBabylonTower[pRow+1:]
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
     return newState
 
 def get_shifts(pBabylonTower):
@@ -54,15 +44,9 @@ def get_shifts(pBabylonTower):
     for row_index, row in enumerate(pBabylonTower):
         shl = shift(pBabylonTower,row_index,constants_m.LEFT)
         shr = shift(pBabylonTower,row_index,constants_m.RIGHT)
-<<<<<<< HEAD
         if (pBabylonTower == shl[0]) and (pBabylonTower == shr[0]):
             pass
         elif shl[0] == shr[0]:
-=======
-        if pBabylonTower == shl == shr:
-            pass
-        elif shl == shr:
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
             result += (shl,)
         else:
             result += (shl,shr,)
@@ -71,11 +55,5 @@ def get_shifts(pBabylonTower):
 
 
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
     
 

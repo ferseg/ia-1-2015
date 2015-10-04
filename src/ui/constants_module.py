@@ -5,9 +5,8 @@ R = 3
 H = 4
 E = -1
 
-<<<<<<< HEAD
-TXT_NAME = "path"
-
+TXT_NAME = "path.txt"
+STEP = "Paso #"
 
 COLOR_DIC = {}
 COLOR_DIC[-1] = " Wall   "
@@ -24,17 +23,12 @@ SHL_MESSAGE = "Rotación izquierda fila %i."
 NOTCH_DOWN_MESSAGE = "Mover muesca hacia abajo %i espacios."
 NOTCH_UP_MESSAGE = "Mover muesca hacia arriba %i espacios."
 
-=======
-
-
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
 NOTCH_SYMBOL = 4
 UP = -1
 DOWN = 1
 RIGHT = 1
 LEFT = -1
 
-<<<<<<< HEAD
 NODE = 0
 LABEL = 1
 
@@ -46,18 +40,13 @@ COST[2] = 9/85
 COST[3] = 3/85
 COST[4] = 1/85
 COST[5] = 1/16
-=======
-COST = {}
 
-COST[0] = 54
-COST[1] = 18
-COST[2] = 9
-COST[3] = 3
-COST[4] = 1
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
-
-
-
+COST_BOT = {}
+COST_BOT[0] = 54/85
+COST_BOT[1] = 18/85
+COST_BOT[2] = 9/85
+COST_BOT[3] = 3/85
+COST_BOT[4] = 1/85
 
 mat = ((E, H, E, E),
        (B, R, B, O),
@@ -82,7 +71,6 @@ matZ = ((E, H, E, E),
         (B, O, G, R),
         (B, O, G, R),
         (B, O, G, R))
-<<<<<<< HEAD
 
 
 mat_i = ((0, -1, -1, -1),
@@ -113,5 +101,3 @@ mn = ((-1,-1,-1,4),
  (1,1,1,1),
  (0,0,0,0))
 
-=======
->>>>>>> b57a739fd0d5c763e10e167fefa954130a9321c3
