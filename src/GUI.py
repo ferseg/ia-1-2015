@@ -3,7 +3,6 @@ from DataFile import *;
 from graph import *;
 import os
 import os.path
-
 #---------------------------------------------MENÚ-------------------------------------------------#
 
 global WIDTH;
@@ -77,6 +76,8 @@ final_state_file_btn = Button(window, text = "Cargar estado final desde archivo"
 
 finish_lbl = Label(window, text = "Estado objetivo alcanzado!",
                        font = ('Arial','10'), background='#fafafa');
+
+
 
 real_path = os.path.normpath(os.path.join(os.getcwd(), "../.."))
 
@@ -182,14 +183,14 @@ def iniciarInterfaz():
                 flechaF = Button(window, **boptions);
             
                 if x == 0 and y != 0 and y != 6:
-                    flechaI.configure(command = lambda y = y: moveH(y,1,0,0));
+                    flechaI.configure(command = lambda y = y: moveH(y,1,0));
                     flechaI.configure(image = izquierda);
-                    flechaF.configure(command = lambda y = y: moveH(y,1,1,0));
+                    flechaF.configure(command = lambda y = y: moveH(y,1,1));
                     flechaF.configure(image = izquierda);
                 elif x == 5 and y != 0 and y != 6:
-                    flechaI.configure(command = lambda y = y: moveH(y,-1,0,0));
+                    flechaI.configure(command = lambda y = y: moveH(y,-1,0));
                     flechaI.configure(image = derecha);
-                    flechaF.configure(command = lambda y = y: moveH(y,-1,1,0));
+                    flechaF.configure(command = lambda y = y: moveH(y,-1,1));
                     flechaF.configure(image = derecha);
                 elif y == 0 and x != 0 and x != 5:
                     flechaI.configure(command = lambda x = x: moveV(x,-1,0));
@@ -254,7 +255,7 @@ def moveBtn(fila, col, estado):
         filaAnt = estados[-1][0];
         colAnt = estados[-1][1];
 
-        posActualMuesca = rowHasEmptySpace(filaAnt,estado, 0);
+        posActualMuesca = rowHasEmptySpace(filaAnt,estado);
         
         prevImg = estados[estado][filaAnt][colAnt].cget('image');
         currImg = estados[estado][fila][col].cget('image');
@@ -273,12 +274,10 @@ def moveBtn(fila, col, estado):
         return -1;        
 #}
 
-def rowHasEmptySpace(fila, estado, action):
+def rowHasEmptySpace(fila, estado):
 #{
     for col in range(0,4):        
-        if action == 0 and str(estados[estado][fila][col].cget('image')) == str(blanco):
-            return col;
-        elif action == 1 and str(estados[estado][fila][col].cget('image')) != '':
+        if str(estados[estado][fila][col].cget('image')) == str(blanco):
             return col;
     return -1;
 #}
@@ -345,11 +344,11 @@ def getPosMuesca(estado):
 
 
 
-def moveH(fila, dire, estado, action):
+def moveH(fila, dire, estado):
 #{
     estados[-1] = [-1,-1,-1];
     
-    posActualMuesca = rowHasEmptySpace(fila, estado, 0);
+    posActualMuesca = rowHasEmptySpace(fila, estado);
 
     currState = [];    
     
@@ -366,19 +365,18 @@ def moveH(fila, dire, estado, action):
         nextImg = currState[pos];
         estados[estado][fila][col].configure(image = nextImg);
 
-    nuevaPos = rowHasEmptySpace(fila, estado, 0);
-    if(action == 0):
-        moveArrows(posActualMuesca, nuevaPos, estado);    
+    nuevaPos = rowHasEmptySpace(fila, estado);
+    moveArrows(posActualMuesca, nuevaPos, estado);    
 
     ea.append(-1);
     if(len(ea) == 5):
         goea();
     
-    if(nuevaPos != -1 and action == 0):
+    if(nuevaPos != -1):
         updateMov(fila, nuevaPos, estado);
     else:
         posMuesca = getPosMuesca(estado);
-        if posMuesca != -1 and action == 0:
+        if posMuesca != -1:
             updateMov(posMuesca[0], posMuesca[1], estado);
         
     
@@ -666,7 +664,7 @@ def matrizTranspuesta(matrix, state):
 
 def loadState(new_matrix, state, action):
 #{    
-    for row in range(0,5):
+    for row in range(0,5):    
         for col in range(0,len(new_matrix[row])):
             if(row != 0):
                 value = new_matrix[row][col];
@@ -676,31 +674,12 @@ def loadState(new_matrix, state, action):
                 estados[state][row + 1][col].configure(image = colores[value]);
             else:                
                 value = new_matrix[0][0][0];
-                ball_pos = new_matrix[0][0][1];                        
-
-                spacePos = rowHasEmptySpace(1, state, 0);
-                
-                if(spacePos == -1):
-                    spacePos = ball_pos;
-
+                ball_pos = new_matrix[0][0][1];                
+                estados[state][1][0].configure(image = colores[value]);
                 if(action == 1):
-                    for x in range(spacePos, 0, -1):
-                        moveH(1,1,state, 0);
-
-                    estados[state][1][0].configure(image = colores[value]);
-                    
                     for x in range(0,ball_pos):
-                        moveH(1,-1,state, 0);
-                else:                    
-                    ballCurrPos = rowHasEmptySpace(1 , state, 1);
-                    estados[state][1][ballCurrPos].configure(image = colores[value]);
-                    if(ballCurrPos > ball_pos):
-                        for x in range(ballCurrPos, ball_pos, -1):
-                            moveH(1,1,state, 1);
-                    else:
-                        for x in range(ballCurrPos, ball_pos):
-                            moveH(1,-1,state, 1);
-#}
+                        moveH(1,-1,state);    
+#}                    
                     
 #--------------------------------------------MAIN-----------------------------------------------
 
@@ -756,7 +735,7 @@ def execute():
         if(len(states) == 1):
             next_btn.configure(state = 'disabled');
             finish_lbl.place(x = 375, y = HEIGHT/2);
-                    
+            
         drawNewGrid();
     #}
 #}
