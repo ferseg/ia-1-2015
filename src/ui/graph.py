@@ -57,9 +57,9 @@ def a_star_search(start, goal):
     frontier.put(start, 0)
     came_from = {}
     cost_so_far = {}
-    label_to = {}
-    came_from[start] = None
-    label_to[start] = None
+    #label_to = {}
+    #came_from[start] = None
+    #label_to[start] = None
     cost_so_far[start] = 0
     while not frontier.empty():
         current = frontier.get()
@@ -70,11 +70,10 @@ def a_star_search(start, goal):
             new_cost = cost_so_far[current] + heuristic(current, next)
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
-                label_to[next] = labels[nodeIndex]
-                #priority = new_cost + heuristic(goal,next)
                 priority = new_cost + heuristic(next,goal)
                 frontier.put(next, priority)
-                came_from[next] = current
+                #label_to[next] = labels[nodeIndex]
+                #came_from[next] = current
     path = reconstruct_path(came_from,label_to,start,goal)
     return path
 
