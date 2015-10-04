@@ -60,6 +60,7 @@ def a_star_search(start, goal):
     #label_to = {}
     #came_from[start] = None
     #label_to[start] = None
+    came_from[start] = (None,None)
     cost_so_far[start] = 0
     while not frontier.empty():
         current = frontier.get()
@@ -74,17 +75,22 @@ def a_star_search(start, goal):
                 frontier.put(next, priority)
                 #label_to[next] = labels[nodeIndex]
                 #came_from[next] = current
-    path = reconstruct_path(came_from,label_to,start,goal)
+                came_from[next] = (current,labels[nodeIndex])
+    #path = reconstruct_path(came_from,label_to,start,goal)
+    path = reconstruct_path(came_from,start,goal)
     return path
 
-def reconstruct_path(came_from,labels_to, start, goal):
+#def reconstruct_path(came_from,labels_to, start, goal):
+def reconstruct_path(came_from, start, goal):
     txtContent = ""
     current = goal
     path = [current]
-    labels = [labels_to[goal]]
+    #labels = [labels_to[goal]]
+    labels = [came_from[goal][1]]
     while current != start:
-        current = came_from[current]
-        current_label = labels_to[current]
+        #current = came_from[current]
+        #current_label = labels_to[current]
+        (current,current_label) = came_from[current]
         path.append(current)
         labels.append(current_label)
     labels.reverse()
