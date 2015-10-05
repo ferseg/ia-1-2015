@@ -48,17 +48,10 @@ def heuristic(current, goal):
                     row_value = 4-row_index
                     if element == currentGoal:
                         result += col_value
+                        #result += row_value*2
                     else:
                         result += col_value*2
-
-##                    col_value = abs(index-column_index)
-##                    row_value = 4-row_index
-##                    if element == currentGoal:
-##                        result += row_value + 2*col_value
-##                    else:
-##                        result += row_value + 2*col_value
-
-
+                        #result += row_value
     return result
 
 def a_star_search(start, goal):
