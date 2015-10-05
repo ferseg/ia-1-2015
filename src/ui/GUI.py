@@ -524,15 +524,16 @@ def openFile(state):
 #{
     filename = filedialog.askopenfilename(**foptions);
     #print(filename, state);
-    matrix = load_matrix(filename);
+    if(filename != ''):
+        matrix = load_matrix(filename);
 
-    if isinstance(matrix, str):
-        printErrorMsg(matrix);
-    else:
-        matrizTranspuesta(matrix,state);
+        if isinstance(matrix, str):
+            printErrorMsg(matrix);
+        else:
+            matrizTranspuesta(matrix,state);
 
     
-    clear_variables();
+        clear_variables();
 #}
 
 def reset_state(action):
@@ -746,8 +747,7 @@ def execute():
         final_state_tuple = tuplify(1);        
         start = time.time();
         parents,cost_so_far = a_star_search(initial_state_tuple, final_state_tuple);
-        end = time.time();
-        print(end - start);
+        end = time.time();        
         global states;
         states = reconstruct_path(parents,initial_state_tuple, final_state_tuple);
 
