@@ -41,12 +41,12 @@ COST[3] = 3/85
 COST[4] = 1/85
 COST[5] = 1/16
 
-COST_BOT = {}
-COST_BOT[0] = 54/85
-COST_BOT[1] = 18/85
-COST_BOT[2] = 9/85
-COST_BOT[3] = 3/85
-COST_BOT[4] = 1/85
+C_COST = {}
+C_COST[0] = 1
+C_COST[1] = 3
+C_COST[2] = 9
+C_COST[3] = 18
+C_COST[4] = 54
 
 mat = ((E, H, E, E),
        (B, R, B, O),

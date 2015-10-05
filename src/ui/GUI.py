@@ -80,10 +80,10 @@ finish_lbl = Label(window, text = "Estado objetivo alcanzado!",
 
 real_path = os.path.normpath(os.path.join(os.getcwd(), "../.."))
 
-arriba = PhotoImage(file = real_path + '/imgs/up.png');
-abajo = PhotoImage(file = real_path + '/imgs/down.png');
-izquierda = PhotoImage(file = real_path + '/imgs/left.png');
-derecha = PhotoImage(file = real_path + '/imgs/right.png');
+arriba = PhotoImage(file = real_path + '/imgs/up.PNG');
+abajo = PhotoImage(file = real_path + '/imgs/down.PNG');
+izquierda = PhotoImage(file = real_path + '/imgs/left.PNG');
+derecha = PhotoImage(file = real_path + '/imgs/right.PNG');
 
 prev_btn = Button(window, command = lambda: prevState(), **boptions2);
 prev_btn.configure(image = izquierda);
@@ -91,17 +91,17 @@ prev_btn.configure(image = izquierda);
 next_btn = Button(window, command = lambda: nextState(), **boptions2);
 next_btn.configure(image = derecha);
 
-blanco = PhotoImage(file = real_path + '/imgs/blanco2.png');
-azul = PhotoImage(file = real_path + '/imgs/azul2.png');
-naranja = PhotoImage(file = real_path + '/imgs/naranja2.png');
-rojo = PhotoImage(file = real_path + '/imgs/rojo2.png');
-verde = PhotoImage(file = real_path + '/imgs/verde2.png');
+blanco = PhotoImage(file = real_path + '/imgs/blanco2.PNG');
+azul = PhotoImage(file = real_path + '/imgs/azul2.PNG');
+naranja = PhotoImage(file = real_path + '/imgs/naranja2.PNG');
+rojo = PhotoImage(file = real_path + '/imgs/rojo2.PNG');
+verde = PhotoImage(file = real_path + '/imgs/verde2.PNG');
 
-blancoA = PhotoImage(file = real_path + '/imgs/blanco3.png');
-azulA = PhotoImage(file = real_path + '/imgs/azul3.png');
-naranjaA = PhotoImage(file = real_path + '/imgs/naranja3.png');
-rojoA = PhotoImage(file = real_path + '/imgs/rojo3.png');
-verdeA = PhotoImage(file = real_path + '/imgs/verde3.png');
+blancoA = PhotoImage(file = real_path + '/imgs/blanco3.PNG');
+azulA = PhotoImage(file = real_path + '/imgs/azul3.PNG');
+naranjaA = PhotoImage(file = real_path + '/imgs/naranja3.PNG');
+rojoA = PhotoImage(file = real_path + '/imgs/rojo3.PNG');
+verdeA = PhotoImage(file = real_path + '/imgs/verde3.PNG');
 
 colores = [azul, naranja, verde, rojo, blanco, azulA, naranjaA, verdeA, rojoA, blancoA];
 colores_lbl = ["Azul(B)", "Naranja(O)","Verde(G)","Rojo(R)","Vacío(H)"];
@@ -791,5 +791,5 @@ iniciarInterfaz();
 
 
 ea_lbl = Label(window);
-pug = PhotoImage(file = real_path + '/imgs/pug.png');
+pug = PhotoImage(file = real_path + '/imgs/pug.PNG');
 ea_lbl.configure(image = pug);

@@ -26,28 +26,39 @@ def heuristic(current, goal):
     result = 0
     if current[3:] == goal[3:]:
         for row_index,row in enumerate(current):
+            if row_index > 2:
+                break
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
                     result += constants_m.COST[5]
+    
     elif current[4] == goal[4]:
-    #else:
         for row_index,row in enumerate(current):
+            if row_index > 3:
+                break
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
                     result += constants_m.COST[row_index]
-    
     else:
         currentGoal,index = get_current_goal(current[4],goal[4])
-        #print(goal[4])
-        #print(currentGoal)
         for row_index,row in enumerate(current):
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
+                    col_value = abs(index-column_index)
+                    row_value = 4-row_index
                     if element == currentGoal:
-                        result += constants_m.COST_BOT[row_index]+(abs(index-column_index))
+                        result += col_value
                     else:
-                        result += constants_m.COST_BOT[1]+(abs(index-column_index))
-    
+                        result += col_value*2
+
+##                    col_value = abs(index-column_index)
+##                    row_value = 4-row_index
+##                    if element == currentGoal:
+##                        result += row_value + 2*col_value
+##                    else:
+##                        result += row_value + 2*col_value
+
+
     return result
 
 def a_star_search(start, goal):
@@ -57,9 +68,6 @@ def a_star_search(start, goal):
     frontier.put(start, 0)
     came_from = {}
     cost_so_far = {}
-    #label_to = {}
-    #came_from[start] = None
-    #label_to[start] = None
     came_from[start] = (None,None)
     cost_so_far[start] = 0
     while not frontier.empty():
@@ -73,51 +81,38 @@ def a_star_search(start, goal):
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(next,goal)
                 frontier.put(next, priority)
-                #label_to[next] = labels[nodeIndex]
-                #came_from[next] = current
                 came_from[next] = (current,labels[nodeIndex])
-    #path = reconstruct_path(came_from,label_to,start,goal)
     path = reconstruct_path(came_from,start,goal)
     return path
 
-#def reconstruct_path(came_from,labels_to, start, goal):
 def reconstruct_path(came_from, start, goal):
     txtContent = ""
     current = goal
     path = [current]
-    #labels = [labels_to[goal]]
     labels = [came_from[goal][1]]
     while current != start:
-        #current = came_from[current]
-        #current_label = labels_to[current]
         (current,current_label) = came_from[current]
         path.append(current)
         labels.append(current_label)
+    labels.append(None)
     labels.reverse()
     path.reverse()
-    index = 1
+    step_index = 1
     for index,element in enumerate(path):
         txt = labels[index]
         if txt != None:
-            txtContent += constants_m.STEP + str(index)+".\n"
+            txtContent += constants_m.STEP + str(step_index)+".\n"
             txtContent += txt + "\n"
+            step_index += 1
         for row in element:
             txtContent += "("
             for entry in row:
                 txtContent += constants_m.COLOR_DIC[entry]
             txtContent += ")\n"
         txtContent += "\n"
-        index += 1
     writer = FileReader(constants_m.TXT_NAME,"w+")
     writer.write(txtContent)
     writer.closeFile()
     return path
-
-"""
-start = time.time()
-parents = a_star_search(constants_m.mat, constants_m.matZ)
-end = time.time()
-print(end-start)
-"""
     
 
