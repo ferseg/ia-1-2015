@@ -43,16 +43,16 @@ COST[5] = 1/16
 
 C_COST = {}
 C_COST[0] = 0
-C_COST[1] = 18
+C_COST[1] = 3
 C_COST[2] = 9
-C_COST[3] = 3
+C_COST[3] = 18
 
 R_COST = {}
 R_COST[0] = 0
-R_COST[1] = 108
-R_COST[2] = 36
-R_COST[3] = 18
-R_COST[4] = 9
+R_COST[1] = 6
+R_COST[2] = 18
+R_COST[3] = 36
+R_COST[4] = 108
 
 mat = ((E, H, E, E),
        (B, R, B, O),
