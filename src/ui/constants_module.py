@@ -42,11 +42,17 @@ COST[4] = 1/85
 COST[5] = 1/16
 
 C_COST = {}
-C_COST[0] = 1
-C_COST[1] = 3
+C_COST[0] = 0
+C_COST[1] = 18
 C_COST[2] = 9
-C_COST[3] = 18
-C_COST[4] = 54
+C_COST[3] = 3
+
+R_COST = {}
+R_COST[0] = 0
+R_COST[1] = 108
+R_COST[2] = 36
+R_COST[3] = 18
+R_COST[4] = 9
 
 mat = ((E, H, E, E),
        (B, R, B, O),
