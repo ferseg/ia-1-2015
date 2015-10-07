@@ -19,7 +19,7 @@ def get_current_goal(start,goal):
     for index,element in enumerate(start):
         color = goal[index]
         if element != color:
-            return index
+            return index,color
     return color
 
 def heuristic(current, goal):
@@ -40,7 +40,7 @@ def heuristic(current, goal):
                 if element != goal[row_index][column_index]:
                     result += constants_m.COST[row_index]
     else:
-        index = get_current_goal(current[4],goal[4])
+        index,color = get_current_goal(current[4],goal[4])
         for row_index,row in enumerate(current):
             for column_index,element in enumerate(row):
                 if element != goal[row_index][column_index]:
@@ -48,6 +48,10 @@ def heuristic(current, goal):
                     if col_value == 3:
                         col_value = 1
                     result += col_value
+                    #if color == element:
+                    #    result += col_value
+                    #else:
+                    #    result += col_value*2
     return result
 
 def a_star_search(start, goal):

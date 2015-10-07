@@ -5,34 +5,322 @@
 ( Blue    Orange  Green   Red    )
 
 Paso #1.
-Rotación izquierda fila 2.
+Rotación izquierda fila 4.
 ( Notch   Wall    Wall    Wall   )
+( Blue    Orange  Green   Red    )
+( Blue    Orange  Green   Red    )
 ( Orange  Green   Red     Blue   )
-( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
 ( Blue    Orange  Green   Red    )
 
 Paso #2.
-Rotación izquierda fila 2.
-( Notch   Wall    Wall    Wall   )
-( Green   Red     Blue    Orange )
+Mover muesca hacia abajo 4 espacios.
+( Blue    Wall    Wall    Wall   )
 ( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
+( Orange  Orange  Green   Red    )
+( Blue    Green   Red     Blue   )
+( Notch   Orange  Green   Red    )
 
 Paso #3.
-Rotación izquierda fila 1.
-( Wall    Wall    Wall    Notch  )
-( Green   Red     Blue    Orange )
+Rotación derecha fila 3.
+( Blue    Wall    Wall    Wall   )
 ( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
+( Red     Orange  Orange  Green  )
+( Blue    Green   Red     Blue   )
+( Notch   Orange  Green   Red    )
 
 Paso #4.
-Rotación izquierda fila 1.
+Mover muesca hacia arriba 3 espacios.
+( Blue    Wall    Wall    Wall   )
+( Notch   Orange  Green   Red    )
+( Blue    Orange  Orange  Green  )
+( Red     Green   Red     Blue   )
+( Blue    Orange  Green   Red    )
+
+Paso #5.
+Rotación izquierda fila 3.
+( Blue    Wall    Wall    Wall   )
+( Notch   Orange  Green   Red    )
+( Orange  Orange  Green   Blue   )
+( Red     Green   Red     Blue   )
+( Blue    Orange  Green   Red    )
+
+Paso #6.
+Mover muesca hacia abajo 3 espacios.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Red     Orange  Green   Blue   )
+( Blue    Green   Red     Blue   )
+( Notch   Orange  Green   Red    )
+
+Paso #7.
+Mover muesca hacia arriba 2 espacios.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Notch   Orange  Green   Blue   )
+( Red     Green   Red     Blue   )
+( Blue    Orange  Green   Red    )
+
+Paso #8.
+Rotación izquierda fila 3.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Orange  Green   Blue    Notch  )
+( Red     Green   Red     Blue   )
+( Blue    Orange  Green   Red    )
+
+Paso #9.
+Mover muesca hacia abajo 2 espacios.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Orange  Green   Blue    Blue   )
+( Red     Green   Red     Red    )
+( Blue    Orange  Green   Notch  )
+
+Paso #10.
+Rotación derecha fila 5.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Orange  Green   Blue    Blue   )
+( Red     Green   Red     Red    )
+( Notch   Blue    Orange  Green  )
+
+Paso #11.
+Mover muesca hacia arriba 1 espacios.
+( Blue    Wall    Wall    Wall   )
+( Orange  Orange  Green   Red    )
+( Orange  Green   Blue    Blue   )
+( Notch   Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #12.
+Rotación izquierda fila 2.
+( Blue    Wall    Wall    Wall   )
+( Orange  Green   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Notch   Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #13.
+Mover muesca hacia arriba 2 espacios.
+( Blue    Wall    Wall    Wall   )
+( Notch   Green   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Orange  Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #14.
+Mover muesca hacia arriba 1 espacios.
+( Notch   Wall    Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Orange  Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #15.
+Rotación derecha fila 1.
+( Wall    Notch   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Orange  Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #16.
+Mover muesca hacia abajo 4 espacios.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Orange  Blue    Red     Red    )
+( Red     Notch   Orange  Green  )
+
+Paso #17.
+Mover muesca hacia arriba 2 espacios.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Notch   Blue    Blue   )
+( Orange  Green   Red     Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #18.
+Rotación derecha fila 4.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Notch   Blue    Blue   )
+( Red     Orange  Green   Red    )
+( Red     Blue    Orange  Green  )
+
+Paso #19.
+Mover muesca hacia abajo 2 espacios.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Orange  Blue    Blue   )
+( Red     Blue    Green   Red    )
+( Red     Notch   Orange  Green  )
+
+Paso #20.
+Rotación izquierda fila 4.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Orange  Blue    Blue   )
+( Blue    Green   Red     Red    )
+( Red     Notch   Orange  Green  )
+
+Paso #21.
+Rotación izquierda fila 4.
+( Wall    Green   Wall    Wall   )
+( Blue    Green   Red     Orange )
+( Orange  Orange  Blue    Blue   )
+( Green   Red     Red     Blue   )
+( Red     Notch   Orange  Green  )
+
+Paso #22.
+Mover muesca hacia arriba 3 espacios.
+( Wall    Green   Wall    Wall   )
+( Blue    Notch   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Green   Orange  Red     Blue   )
+( Red     Red     Orange  Green  )
+
+Paso #23.
+Rotación derecha fila 1.
+( Wall    Wall    Green   Wall   )
+( Blue    Notch   Red     Orange )
+( Orange  Green   Blue    Blue   )
+( Green   Orange  Red     Blue   )
+( Red     Red     Orange  Green  )
+
+Paso #24.
+Rotación derecha fila 3.
+( Wall    Wall    Green   Wall   )
+( Blue    Notch   Red     Orange )
+( Blue    Orange  Green   Blue   )
+( Green   Orange  Red     Blue   )
+( Red     Red     Orange  Green  )
+
+Paso #25.
+Mover muesca hacia abajo 2 espacios.
+( Wall    Wall    Green   Wall   )
+( Blue    Orange  Red     Orange )
+( Blue    Orange  Green   Blue   )
+( Green   Notch   Red     Blue   )
+( Red     Red     Orange  Green  )
+
+Paso #26.
+Rotación derecha fila 4.
+( Wall    Wall    Green   Wall   )
+( Blue    Orange  Red     Orange )
+( Blue    Orange  Green   Blue   )
+( Blue    Green   Notch   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #27.
+Mover muesca hacia arriba 1 espacios.
+( Wall    Wall    Green   Wall   )
+( Blue    Orange  Red     Orange )
+( Blue    Orange  Notch   Blue   )
+( Blue    Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #28.
+Mover muesca hacia arriba 2 espacios.
 ( Wall    Wall    Notch   Wall   )
-( Green   Red     Blue    Orange )
-( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
-( Blue    Orange  Green   Red    )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Blue    Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #29.
+Rotación derecha fila 1.
+( Wall    Wall    Wall    Notch  )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Blue    Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #30.
+Rotación derecha fila 1.
+( Notch   Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Blue    Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #31.
+Mover muesca hacia abajo 2 espacios.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Notch   Orange  Red     Blue   )
+( Blue    Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #32.
+Mover muesca hacia abajo 1 espacios.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Notch   Green   Green   Red    )
+( Red     Red     Orange  Green  )
+
+Paso #33.
+Rotación izquierda fila 4.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Green   Green   Red     Notch  )
+( Red     Red     Orange  Green  )
+
+Paso #34.
+Rotación izquierda fila 4.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Red     Blue   )
+( Green   Red     Notch   Green  )
+( Red     Red     Orange  Green  )
+
+Paso #35.
+Mover muesca hacia arriba 1 espacios.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Notch   Blue   )
+( Green   Red     Red     Green  )
+( Red     Red     Orange  Green  )
+
+Paso #36.
+Rotación derecha fila 4.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Blue    Orange  Notch   Blue   )
+( Green   Green   Red     Red    )
+( Red     Red     Orange  Green  )
+
+Paso #37.
+Rotación izquierda fila 3.
+( Blue    Wall    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Orange  Notch   Blue    Blue   )
+( Green   Green   Red     Red    )
+( Red     Red     Orange  Green  )
+
+Paso #38.
+Rotación derecha fila 1.
+( Wall    Blue    Wall    Wall   )
+( Blue    Orange  Green   Orange )
+( Orange  Notch   Blue    Blue   )
+( Green   Green   Red     Red    )
+( Red     Red     Orange  Green  )
+
+Paso #39.
+Mover muesca hacia arriba 2 espacios.
+( Wall    Notch   Wall    Wall   )
+( Blue    Blue    Green   Orange )
+( Orange  Orange  Blue    Blue   )
+( Green   Green   Red     Red    )
+( Red     Red     Orange  Green  )
+
+Paso #40.
+Rotación izquierda fila 1.
+( Notch   Wall    Wall    Wall   )
+( Blue    Blue    Green   Orange )
+( Orange  Orange  Blue    Blue   )
+( Green   Green   Red     Red    )
+( Red     Red     Orange  Green  )
 
